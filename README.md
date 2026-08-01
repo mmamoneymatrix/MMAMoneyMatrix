@@ -165,3 +165,36 @@ Endpoints:
 ```bash
 git clone https://github.com/mmamoneymatrix/MMAMoneyMatrix.git
 cd MMAMoneyMatrix
+## Backend Setup (Flask Example)
+
+### 1. Create and activate a virtual environment
+```bash
+python3 -m venv venv
+source venv/bin/activate   # macOS / Linux
+venv\Scripts\activate      # Windows
+pip install -r requirements.txt
+python app.py
+http://localhost:5000
+backend/
+    app.py
+    engines/
+        matchup_engine.py
+        monte_carlo.py
+        scoring.py
+        bonuses.py
+    models/
+        fighter.py
+        fight.py
+    routes/
+        import_fighter.py
+        run_simulation.py
+        get_fighter.py
+        get_history.py
+    requirements.txt
+Flask
+Flask-Cors
+requests
+numpy
+pandas
+scipy
+supabase
