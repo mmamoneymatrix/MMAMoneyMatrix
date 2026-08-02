@@ -1,41 +1,51 @@
-# MMAMoneyMatrix Codebase
+# MMAMoneyMatrix
 
-This is the complete codebase for the MMAMoneyMatrix fight simulator, built according to the provided architecture specification.
+This commit reorganizes the repository to make the backend a proper Python package
+and fixes imports and frontend wiring so the simulator works locally.
 
-## Project Structure
+## What I changed
 
-### Backend (Flask)
-- `backend/app.py`: Main entry point and API route registration.
-- `backend/engines/`: Core logic engines.
-  - `matchup_engine.py`: Generates the "Fight Geometry Object".
-  - `monte_carlo.py`: Runs thousands of fight simulations.
-  - `scoring.py`: Implements round-by-round scoring and judge bias.
-  - `bonuses.py`: Handles gym tier and underdog realism modifiers.
-- `backend/models/`: Data structures for Fighters and Fights.
-- `backend/routes/`: API endpoints for simulation and data management.
+- Added package markers: `backend/__init__.py`, `backend/routes/__init__.py`, `backend/database/__init__.py`, `backend/engines/__init__.py`.
+- Normalized backend imports to package-relative so `uvicorn backend.app:app` works.
+- Exposed the simulation router under `/api/run_simulation` and added a health route `/`.
+- Updated frontend `frontend/pages/matchup.tsx` to call the API at `/api/run_simulation` and use `NEXT_PUBLIC_API_URL` with a localhost fallback.
+- Added `pyproject.toml` (Black config) and formatted updated files.
 
-### Frontend (Next.js)
-- `frontend/pages/`: Next.js page structure (Home, Import, Matchup).
-- `frontend/components/`: Reusable UI components (MatchupRunner, FighterCard).
-- `frontend/package.json`: Frontend dependencies and scripts.
+## How to run
 
-### Database (Postgres)
-- `database/schema.sql`: SQL definitions for fighters, fights, and styles tables.
+Backend:
 
-## Setup Instructions
+```bash
+# From project root
+pip install -r requirements.txt    # if you have a requirements file
+uvicorn backend.app:app --reload --port 8000
+```
 
-### Backend
-1. Navigate to `backend/`
-2. Create a virtual environment: `python3 -m venv venv`
-3. Activate: `source venv/bin/activate`
-4. Install dependencies: `pip install -r requirements.txt`
-5. Run: `python app.py`
+If you prefer to run from the backend folder:
 
-### Frontend
-1. Navigate to `frontend/`
-2. Install dependencies: `npm install`
-3. Run development server: `npm run dev`
+```bash
+cd backend
+uvicorn app:app --reload --port 8000
+```
 
-### Database
-1. Execute `database/schema.sql` in your Postgres or Supabase instance.
-2. Configure `.env` with your database credentials.
+Frontend (Next.js):
+
+```bash
+cd frontend
+npm install
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
+```
+
+## Test the API with curl
+
+```bash
+curl -X POST "http://localhost:8000/api/run_simulation" \
+  -H "Content-Type: application/json" \
+  -d '{"fighterA":"Fighter1","fighterB":"Fighter2","simulations":1000}'
+```
+
+## Notes / Follow-ups
+
+- If you see `ModuleNotFoundError` for relative imports, ensure the `backend` folder is present in the repo root and has the `__init__.py` file (added here).
+- If engine or database functions are `async`, update calls to `await` them and make sure the functions are async-compatible.
+- Optional: add GitHub Actions for linting and testing.

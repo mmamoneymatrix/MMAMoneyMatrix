@@ -1,36 +1,38 @@
-from flask import Blueprint, request, jsonify
-from engines.matchup_engine import MatchupEngine
-from engines.monte_carlo import MonteCarloEngine
-from models.fighter import Fighter
-from models.fight import Fight
-from database.db import get_fighter_by_name
+from typing import Any, Dict
 
-run_simulation_bp = Blueprint('run_simulation', __name__)
+from fastapi import APIRouter, HTTPException, status
+from pydantic import BaseModel
 
-@run_simulation_bp.route('/run-simulation', methods=['POST'])
-def run_simulation():
-    data = request.json
-    fighter_a_name = data.get('fighter_a')
-    fighter_b_name = data.get('fighter_b')
-    iterations = data.get('iterations', 10000)
+from ..engines.matchup_engine import build_matchup
+from ..engines.monte_carlo import run_monte_carlo
+from ..database.db import get_fighter_by_name
 
-    # 1. Load fighter objects from database
-    fighter_a = get_fighter_by_name(fighter_a_name)
-    fighter_b = get_fighter_by_name(fighter_b_name)
+router = APIRouter()
 
-    if not fighter_a or not fighter_b:
-        return jsonify({"error": "One or both fighters not found"}), 400
 
-    # 2. Build matchup engine
-    engine = MatchupEngine(fighter_a, fighter_b)
-    geometry = engine.generate_fight_geometry()
+class SimulationRequest(BaseModel):
+    fighterA: str
+    fighterB: str
+    simulations: int = 5000
 
-    # 3. Run Monte Carlo simulation
-    mc = MonteCarloEngine(geometry, iterations=iterations)
-    results = mc.run()
 
-    return jsonify({
-        "geometry": geometry,
-        "results": results
-    })
+@router.post("/run_simulation", response_model=Dict[str, Any])
+async def run_simulation(req: SimulationRequest):
+    # Load fighters (these helper functions are assumed synchronous)
+    f1 = get_fighter_by_name(req.fighterA)
+    f2 = get_fighter_by_name(req.fighterB)
 
+    if not f1 or not f2:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="One or both fighters not found",
+        )
+
+    matchup = build_matchup(f1, f2)
+    results = run_monte_carlo(matchup, req.simulations)
+
+    return {
+        "fighterA": req.fighterA,
+        "fighterB": req.fighterB,
+        "results": results,
+    }
