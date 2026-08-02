@@ -1,1 +1,92 @@
 
+
+Minimal Python Monte Carlo simulator (save as fight_sim.py)
+```python name=fight_sim.py
+#!/usr/bin/env python3
+"""
+Simple Monte Carlo MMA fight simulator.
+- Two fighters with strike and takedown ratings (0..1).
+- Each round we sample events and decide a round winner.
+- Outcome is KO/TKO/submission (rare) or decision based on rounds.
+This is intentionally simple — replace the model with richer logic later.
+"""
+import random
+import argparse
+from dataclasses import dataclass
+from collections import Counter
+
+ROUNDS = 3
+ROUND_WIN_SCORE = 10
+
+@dataclass
+class Fighter:
+    name: str
+    strike: float  # probability to land or influence striking success
+    takedown: float  # probability to score takedown / control
+
+def simulate_round(a: Fighter, b: Fighter):
+    """Simulate a single round; returns winner: 'A', 'B', or 'draw'."""
+    # Simple scoring: combine strike advantage and takedown advantage
+    a_score = random.gauss(a.strike, 0.08) + random.gauss(a.takedown, 0.06)
+    b_score = random.gauss(b.strike, 0.08) + random.gauss(b.takedown, 0.06)
+    if abs(a_score - b_score) < 0.05:
+        return 'draw'
+    return 'A' if a_score > b_score else 'B'
+
+def simulate_fight(a: Fighter, b: Fighter):
+    """Simulate a fight of ROUNDS rounds. Return 'A','B','draw', or 'ko_a','ko_b'."""
+    # small chance of early finish based on large advantage
+    # check for KO before rounds begin (very simple)
+    adv = (a.strike - b.strike) + (a.takedown - b.takedown)
+    if random.random() < max(0.0, adv) * 0.02:
+        return 'ko_a'
+    if random.random() < max(0.0, -adv) * 0.02:
+        return 'ko_b'
+
+    rounds = {'A':0, 'B':0, 'draws':0}
+    for _ in range(ROUNDS):
+        r = simulate_round(a, b)
+        if r == 'A':
+            rounds['A'] += 1
+        elif r == 'B':
+            rounds['B'] += 1
+        else:
+            rounds['draws'] += 1
+
+    if rounds['A'] > rounds['B']:
+        return 'A'
+    if rounds['B'] > rounds['A']:
+        return 'B'
+    return 'draw'
+
+def monte_carlo(a: Fighter, b: Fighter, trials=10000):
+    results = Counter()
+    for _ in range(trials):
+        results[simulate_fight(a,b)] += 1
+    # normalize
+    for k in list(results):
+        results[k] = results[k] / trials
+    return results
+
+def parse_fighter(s: str):
+    # "Name:strike:takedown"
+    parts = s.split(':')
+    if len(parts) != 3:
+        raise ValueError("Fighter must be Name:strike:takedown")
+    name = parts[0]
+    strike = float(parts[1])
+    takedown = float(parts[2])
+    return Fighter(name, strike, takedown)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Monte Carlo MMA fight simulator")
+    parser.add_argument('--fighter-a', required=True, help='Name:strike:takedown (0-1)')
+    parser.add_argument('--fighter-b', required=True, help='Name:strike:takedown (0-1)')
+    parser.add_argument('--trials', type=int, default=5000)
+    args = parser.parse_args()
+    a = parse_fighter(args.fighter_a)
+    b = parse_fighter(args.fighter_b)
+    res = monte_carlo(a,b,trials=args.trials)
+    print(f"Simulated {args.trials} fights between {a.name} and {b.name}")
+    for k,v in sorted(res.items(), key=lambda x: x[0]):
+        print(f"{k}: {v:.3%}")
