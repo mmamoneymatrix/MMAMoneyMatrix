@@ -1,0 +1,10 @@
+4. Common Opponent & History Analysis
+The simulator compares:
+
+Shared opponents
+
+Performance trends
+
+Stylistic vulnerabilities
+
+Improvement over time

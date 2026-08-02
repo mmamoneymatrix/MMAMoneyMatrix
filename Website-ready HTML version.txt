@@ -1,0 +1,63 @@
+<section id="how-it-works">
+  <h1>How MMAMoneyMatrix Works</h1>
+
+  <p>MMAMoneyMatrix is a modular MMA fight simulation engine built for real-world prediction, not just entertainment.</p>
+
+  <h2>1. Fighter Data</h2>
+  <p>
+    We start by building a complete profile for each fighter:
+    striking stats, grappling stats, fight history, style tags,
+    gym tier, and underdog level. All data is normalized and stored
+    in a structured database.
+  </p>
+
+  <h2>2. Matchup Logic Engine</h2>
+  <p>
+    The matchup engine analyzes how two fighters interact:
+    pressure vs counter, wrestler vs striker, kick-heavy vs grappler,
+    cardio monster vs slow starter, and more. It produces a
+    <strong>fight geometry</strong> object that describes range, pace,
+    grappling advantage, striking advantage, chaos, cardio, and
+    vulnerability.
+  </p>
+
+  <h2>3. Monte Carlo Simulation</h2>
+  <p>
+    Using the fight geometry, we simulate the fight thousands of times.
+    Each simulation runs round-by-round, modeling damage, control,
+    knockdowns, submissions, fatigue, and momentum. This produces raw
+    win, method, and round probabilities.
+  </p>
+
+  <h2>4. Finish Probability Engine</h2>
+  <p>
+    We model KO/TKO and submission outcomes using power, knockdown rate,
+    submission threat, chaos factor, vulnerability, and fatigue.
+    This determines inside-the-distance results and when they occur.
+  </p>
+
+  <h2>5. Scoring & Judging Model</h2>
+  <p>
+    If a simulated fight goes the distance, we apply a realistic UFC-style
+    scoring model: effective striking, effective grappling, aggression,
+    and octagon control. We simulate multiple judges with different bias
+    profiles to produce decision outcomes like unanimous, split, and
+    majority decisions.
+  </p>
+
+  <h2>6. Bonus Layer</h2>
+  <p>
+    We add realism with two bonus systems:
+    an <strong>Elite Gym Tier Bonus</strong> and an
+    <strong>Underdog Bonus</strong>. These reflect real-world trends
+    where elite camps and live underdogs outperform raw stats.
+  </p>
+
+  <h2>7. Final Output</h2>
+  <p>
+    Finally, we normalize all probabilities and generate:
+    win probability, method probability, round probability,
+    confidence intervals, and an AI-powered fight breakdown that
+    explains why the matchup looks the way it does.
+  </p>
+</section>

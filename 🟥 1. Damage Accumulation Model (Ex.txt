@@ -1,0 +1,517 @@
+🟥 1. Damage Accumulation Model (Expert Mode)
+Damage is the backbone of the simulation.
+It affects KO probability, submission vulnerability, cardio decline, and round scoring.
+
+MMAMoneyMatrix uses a nonlinear exponential damage curve:
+
+𝐷
+(
+𝑡
+)
+=
+1
+−
+𝑒
+−
+𝑘
+⋅
+damageEvents
+(
+𝑡
+)
+Where:
+
+𝑘
+ = sensitivity constant
+
+damageEvents(t) = weighted sum of:
+
+significant strikes absorbed
+
+knockdowns
+
+ground‑and‑pound
+
+elbows/kicks (higher weight)
+
+dominant grappling positions
+
+Weighted Damage Events
+Each event has a multiplier:
+
+Event	Weight
+Jab	0.2
+Cross	0.3
+Hook	0.4
+Uppercut	0.5
+Kick	0.6
+Elbow	0.7
+Knockdown	2.0
+GNP flurry	1.2
+Dominant position	0.8
+
+
+Damage Effects
+Damage influences:
+
+KO hazard
+
+Submission hazard
+
+Fatigue curve
+
+Vulnerability curve
+
+Round scoring
+
+Momentum shifts
+
+Damage is stored as:
+
+𝐷
+𝑡
+𝑜
+𝑡
+𝑎
+𝑙
+=
+∫
+0
+𝑇
+𝐷
+(
+𝑡
+)
+ 
+𝑑
+𝑡
+🟥 2. Fatigue Curve Modeling (Expert Mode)
+Fatigue reduces:
+
+defense
+
+reaction time
+
+scrambling ability
+
+striking accuracy
+
+grappling strength
+
+MMAMoneyMatrix uses a hybrid cardio + damage fatigue model:
+
+𝐹
+(
+𝑡
+)
+=
+𝛼
+⋅
+pace
+(
+𝑡
+)
++
+𝛽
+⋅
+𝐷
+(
+𝑡
+)
++
+𝛾
+⋅
+(
+1
+−
+cardioIndex
+)
+Where:
+
+pace(t) = round tempo
+
+D(t) = damage curve
+
+cardioIndex = fighter’s cardio rating
+
+α, β, γ = weighting constants
+
+Fatigue Effects
+Fatigue increases:
+
+KO probability
+
+SUB probability
+
+vulnerability
+
+chaosFactor
+
+lateRoundAdvantage for cardio monsters
+
+Fatigue decreases:
+
+striking accuracy
+
+takedown defense
+
+submission defense
+
+paceControl
+
+🟥 3. Knockdown Probability Function (Expert Mode)
+Knockdowns are modeled using a power‑weighted logistic function:
+
+𝑃
+𝐾
+𝐷
+(
+𝑡
+)
+=
+𝜎
+(
+𝑃
+⋅
+𝐴
+⋅
+𝐷
+(
+𝑡
+)
+⋅
+𝑉
+)
+Where:
+
+𝜎
+ = logistic function
+
+𝑃
+ = power index
+
+𝐴
+ = accuracy
+
+𝐷
+(
+𝑡
+)
+ = damage curve
+
+𝑉
+ = vulnerability index
+
+Power Index
+Derived from:
+
+strike power
+
+knockdown rate
+
+style tags (KO artist, brawler)
+
+Vulnerability Index
+Derived from:
+
+defense
+
+damage tolerance
+
+fatigue
+
+age decline
+
+Knockdown Effects
+A knockdown triggers:
+
+massive damage spike
+
+momentum shift
+
+finishThreat increase
+
+chaosFactor increase
+
+scoring swing (10‑8 or 10‑7 potential)
+
+🟥 4. Submission Chain Modeling (Expert Mode)
+Submissions are modeled as multi‑step chains, not single events.
+
+A submission attempt is broken into phases:
+
+Entry Phase
+
+takedown
+
+clinch
+
+scramble
+
+guard pull
+
+Control Phase
+
+guard
+
+half guard
+
+side control
+
+mount
+
+back control
+
+Attack Phase
+
+choke
+
+joint lock
+
+transition attack
+
+Finish Phase
+
+tap
+
+technical submission
+
+ref stoppage
+
+Each phase has a probability:
+
+𝑃
+𝑆
+𝑈
+𝐵
+(
+𝑡
+)
+=
+𝑃
+𝑒
+𝑛
+𝑡
+𝑟
+𝑦
+⋅
+𝑃
+𝑐
+𝑜
+𝑛
+𝑡
+𝑟
+𝑜
+𝑙
+⋅
+𝑃
+𝑎
+𝑡
+𝑡
+𝑎
+𝑐
+𝑘
+⋅
+𝑃
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+Modifiers
+Submission probability increases with:
+
+fatigue
+
+damage
+
+grapplingAdvantage
+
+scramble success
+
+style tags (grappler, submission hunter)
+
+Submission probability decreases with:
+
+cardio
+
+damage tolerance
+
+defensive grappling
+
+wrestler top control
+
+🟥 5. Full Monte Carlo Simulation Math (Expert Mode)
+The Monte Carlo engine runs N simulated fights (5,000–50,000).
+
+Each simulation is a sequence of rounds:
+
+Fight
+=
+{
+𝑅
+1
+,
+𝑅
+2
+,
+𝑅
+3
+,
+𝑅
+4
+,
+𝑅
+5
+}
+Each round is modeled as:
+
+𝑅
+𝑖
+=
+𝑓
+(
+pace
+,
+striking
+,
+grappling
+,
+damage
+,
+fatigue
+,
+chaos
+)
+Round Event Generation
+For each round:
+
+Striking Exchanges
+
+𝐸
+𝑠
+=
+Poisson
+(
+𝜆
+𝑠
+)
+Where λ_s is derived from paceControl and strikingAdvantage.
+
+Grappling Exchanges
+
+𝐸
+𝑔
+=
+Poisson
+(
+𝜆
+𝑔
+)
+Where λ_g is derived from grapplingAdvantage.
+
+Damage Update
+
+𝐷
+(
+𝑡
++
+1
+)
+=
+𝐷
+(
+𝑡
+)
++
+Δ
+𝐷
+Fatigue Update
+
+𝐹
+(
+𝑡
++
+1
+)
+=
+𝐹
+(
+𝑡
+)
++
+Δ
+𝐹
+Finish Hazard
+
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+=
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
++
+𝐻
+𝑆
+𝑈
+𝐵
+(
+𝑡
+)
+Finish Check
+
+Finish if 
+𝑈
+<
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+Where 
+𝑈
+∼
+Uniform
+(
+0
+,
+1
+)
+.
+
+Decision Path
+If no finish occurs:
+
+scoring model evaluates each round
+
+judge bias matrices produce scorecards
+
+decision type is determined
+
+Aggregation
+After N simulations:
+
+win probability
+
+method probability
+
+round probability
+
+confidence intervals

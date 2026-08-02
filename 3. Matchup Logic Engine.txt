@@ -1,0 +1,322 @@
+3. Matchup Logic Engine
+The matchup engine evaluates how fighters interact stylistically and contextually.
+
+Style vs Style Adjustments
+Pressure vs counter
+
+Wrestler vs striker
+
+Grappler vs scrambler
+
+Southpaw vs orthodox
+
+Long reach vs short reach
+
+Fast starter vs slow starter
+
+Contextual Adjustments
+Layoff penalty
+
+Short notice penalty
+
+Altitude penalty
+
+Weight class changes
+
+Age curve decline
+
+Damage accumulation
+
+Recent form boost/penalty
+
+2. Matchup Logic Engine (Advanced Breakdown)
+The Matchup Logic Engine is the brain of MMAMoneyMatrix.
+It takes two fighters — each with hundreds of attributes — and determines how they interact before the Monte Carlo simulation begins.
+
+Think of it as the pre‑fight physics model that sets the stage for everything that follows.
+
+Below is the full, advanced breakdown.
+
+🟥 2.1 Purpose of the Matchup Logic Engine
+The engine answers one question:
+
+“How do these two fighters interact stylistically, physically, and historically?”
+It does this by:
+
+Comparing stats
+
+Comparing styles
+
+Comparing tendencies
+
+Comparing historical patterns
+
+Applying matchup modifiers
+
+Generating a “fight geometry” profile
+
+This profile is then fed into the Monte Carlo simulation.
+
+🟥 2.2 Inputs to the Engine
+The engine receives two fully‑ingested fighter objects:
+
+Code
+fighterA = {
+  bio,
+  career,
+  striking,
+  grappling,
+  history,
+  styles,
+  gymTier,
+  underdogLevel,
+  derivedMetrics
+}
+
+fighterB = { ...same structure... }
+🟥 2.3 Core Matchup Components
+The engine evaluates six major matchup categories, each with multiple sub‑layers.
+
+🟦 2.3.1 Style vs Style Interaction (Deep Layer)
+This is the most important part of the engine.
+
+Your style system creates behavioral vectors for each fighter.
+The matchup engine compares these vectors to determine:
+
+A. Range Control
+Kick-heavy vs boxer
+
+Long reach vs short reach
+
+Southpaw vs orthodox
+
+Pressure vs counter
+
+B. Pace Interaction
+Cardio monster vs slow starter
+
+Volume striker vs low-volume power striker
+
+Pressure striker vs point fighter
+
+C. Grappling Interaction
+Wrestler vs striker
+
+Grappler vs scrambler
+
+Top-control fighter vs bottom player
+
+Clinch-heavy vs distance striker
+
+D. Chaos Interaction
+Brawler vs technician
+
+Fast starter vs slow starter
+
+KO artist vs durable fighter
+
+Each interaction produces positive or negative modifiers.
+
+Example:
+
+Code
+pressure_striker vs counter_striker → +0.15 countering advantage
+kick_heavy vs wrestler → -0.10 takedown vulnerability
+cardio_monster vs slow_starter → +0.20 late-round advantage
+These modifiers feed directly into simulation.🟦 2.3.2 Statistical Differential Layer
+The engine compares raw stats and derived stats.
+
+Striking Differential
+Accuracy
+
+Defense
+
+Knockdown rate
+
+Strike tempo
+
+Strike differential
+
+Power index
+
+Grappling Differential
+Takedown accuracy
+
+Takedown defense
+
+Control time
+
+Submission attempts
+
+Scramble success
+
+Cardio Differential
+Pace rating
+
+Late-round performance
+
+Damage absorption over time
+
+Derived Differential
+Momentum index
+
+Damage tolerance index
+
+Grappling differential
+
+Striking differential
+
+Each differential becomes a numeric modifier.
+
+Example:
+
+Code
+fighterA.strike_differential - fighterB.strike_differential = +0.22
+🟦 2.3.3 Physical Attribute Interaction
+The engine evaluates physical traits:
+
+Height
+Taller fighters control range
+
+Shorter fighters win inside exchanges
+
+Reach
+Longer reach improves jabs, counters
+
+Shorter reach improves clinch entries
+
+Age
+Decline curve applied
+
+Cardio penalty
+
+Damage tolerance penalty
+
+Stance
+Southpaw advantage
+
+Switch stance unpredictability
+
+Each physical attribute creates a fight geometry modifier.
+
+🟦 2.3.4 Historical Pattern Layer
+The engine evaluates:
+
+A. Common Opponents
+How each fighter performed
+
+Style vulnerabilities
+
+Style strengths
+
+Damage taken
+
+Damage given
+
+B. Improvement Curve
+Fighters improving over time
+
+Fighters declining over time
+
+C. Activity Level
+Long layoffs
+
+Short notice fights
+
+Frequent fights
+
+D. Weight Class Changes
+Up = durability boost, speed penalty
+
+Down = speed boost, cardio penalty
+
+These patterns create trend modifiers.
+
+🟦 2.3.5 Contextual Factors
+The engine applies context:
+
+Short Notice
+Cardio penalty
+
+Pace penalty
+
+Game plan penalty
+
+Altitude
+Cardio penalty
+
+Pace penalty
+
+Travel
+Minor cardio penalty
+
+Injury Notes
+If present, small penalty
+
+These are small but realistic modifiers.
+
+🟦 2.3.6 Bonus Layer Integration (NEW)
+Gym Tier Bonus
+Applied as a pre‑simulation modifier:
+
+Elite gyms improve cardio, game planning, defense
+
+Small gyms reduce preparation quality
+
+Underdog Bonus
+Not applied here — applied after simulation.
+
+🟥 2.4 Output of the Matchup Logic Engine
+The engine produces a Fight Geometry Object:
+
+Code
+fightGeometry = {
+  rangeControl: 0.18,
+  paceControl: -0.12,
+  grapplingAdvantage: 0.25,
+  strikingAdvantage: -0.05,
+  chaosFactor: 0.30,
+  cardioAdvantage: 0.10,
+  earlyRoundAdvantage: -0.08,
+  lateRoundAdvantage: 0.22,
+  finishThreat: 0.15,
+  vulnerability: -0.12,
+  gymTierModifier: 0.06,
+  contextModifier: -0.03
+}
+This object is fed directly into the Monte Carlo simulation.
+
+🟥 2.5 Why This Engine Is Elite
+Most simulators:
+
+Compare stats
+
+Ignore styles
+
+Ignore history
+
+Ignore physical attributes
+
+Ignore context
+
+Ignore bonuses
+
+MMAMoneyMatrix:
+
+Models style geometry
+
+Models fight physics
+
+Models pace interaction
+
+Models chaos probability
+
+Models round dynamics
+
+Models trend curves
+
+Models gym quality
+
+Models underdog realism
+
+This makes your simulator far more realistic than anything public.

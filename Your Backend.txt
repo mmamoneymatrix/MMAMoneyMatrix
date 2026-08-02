@@ -1,0 +1,193 @@
+Directory Structure (App Router)
+Code
+app/
+└── api/
+    ├── fighters/
+    │   ├── import/route.ts
+    │   ├── [id]/route.ts
+    │   ├── list/route.ts
+    │   └── search/route.ts
+    │
+    └── matchup/
+        ├── run/route.ts
+        └── scenario/route.ts
+🟥 /api/fighters/import/route.ts
+Imports a fighter by name or UFC URL.
+
+ts
+import { NextResponse } from "next/server";
+import { importFighterFromQuery } from "@/lib/fighterService";
+
+export async function POST(req: Request) {
+  const { query } = await req.json();
+
+  const fighter = await importFighterFromQuery(query);
+
+  return NextResponse.json(fighter);
+}
+🟥 /api/fighters/[id]/route.ts
+Fetch a fighter profile.
+
+ts
+import { NextResponse } from "next/server";
+import { getFighterById } from "@/lib/fighterService";
+
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const fighter = await getFighterById(params.id);
+  return NextResponse.json(fighter);
+}
+🟥 /api/fighters/list/route.ts
+List all fighters in your database.
+
+ts
+import { NextResponse } from "next/server";
+import { listFighters } from "@/lib/fighterService";
+
+export async function GET() {
+  const fighters = await listFighters();
+  return NextResponse.json(fighters);
+}
+🟥 /api/fighters/search/route.ts
+Search fighters by name.
+
+ts
+import { NextResponse } from "next/server";
+import { searchFighters } from "@/lib/fighterService";
+
+export async function POST(req: Request) {
+  const { name } = await req.json();
+  const results = await searchFighters(name);
+  return NextResponse.json(results);
+}
+🟥 /api/matchup/run/route.ts
+Runs the full simulation:
+Matchup Logic → Monte Carlo → Finish Engine → Scoring → Output.
+
+ts
+import { NextResponse } from "next/server";
+import { runFullMatchup } from "@/lib/matchupEngine";
+
+export async function POST(req: Request) {
+  const { fighterA, fighterB } = await req.json();
+
+  const result = await runFullMatchup(fighterA, fighterB);
+
+  return NextResponse.json(result);
+}
+🟥 /api/matchup/scenario/route.ts
+Runs scenario-based simulations (short notice, altitude, etc.).
+
+ts
+import { NextResponse } from "next/server";
+import { runScenarioMatchup } from "@/lib/matchupEngine";
+
+export async function POST(req: Request) {
+  const { fighterA, fighterB, scenario } = await req.json();
+
+  const result = await runScenarioMatchup(fighterA, fighterB, scenario);
+
+  return NextResponse.json(result);
+}
+🟩 Backend Service Layer (lib/fighterService.ts)
+This is where your fighter logic lives.
+
+ts
+import { Fighter } from "./types";
+
+export async function importFighterFromQuery(query: string): Promise<Fighter> {
+  // parse UFC URL or name
+  // scrape or fetch stats
+  // normalize fighter object
+  return {} as Fighter;
+}
+
+export async function getFighterById(id: string): Promise<Fighter> {
+  return {} as Fighter;
+}
+
+export async function listFighters(): Promise<Fighter[]> {
+  return [];
+}
+
+export async function searchFighters(name: string): Promise<Fighter[]> {
+  return [];
+}
+🟩 Backend Simulation Layer (lib/matchupEngine.ts)
+This is where your fight engine lives.
+
+ts
+import { MatchupResult } from "./types";
+
+export async function runFullMatchup(
+  fighterA: string,
+  fighterB: string
+): Promise<MatchupResult> {
+  // 1. Load fighters
+  // 2. Build fightGeometry
+  // 3. Run Monte Carlo
+  // 4. Run Finish Engine
+  // 5. Run Scoring Model
+  // 6. Normalize + return
+  return {} as MatchupResult;
+}
+
+export async function runScenarioMatchup(
+  fighterA: string,
+  fighterB: string,
+  scenario: string
+): Promise<MatchupResult> {
+  // apply scenario modifiers
+  return {} as MatchupResult;
+}
+🟩 TypeScript Interfaces (lib/types.ts)
+Already provided earlier, but here’s the full version:
+
+ts
+export interface Fighter {
+  id: string;
+  name: string;
+  record: string;
+  gym: string;
+  styles: string[];
+  striking: any;
+  grappling: any;
+  derived: any;
+}
+
+export interface MethodBreakdown {
+  ko: number;
+  sub: number;
+  dec: number;
+}
+
+export interface ConfidenceRange {
+  low: number;
+  high: number;
+}
+
+export interface MatchupResult {
+  fighterA: Fighter;
+  fighterB: Fighter;
+  winProbA: number;
+  winProbB: number;
+  methods: MethodBreakdown;
+  rounds: Record<string, number>;
+  confidence: ConfidenceRange;
+}
+🟩 Your Backend Is Now Fully Scaffolded
+You now have:
+
+All API routes
+
+Full backend service layer
+
+Full simulation engine layer
+
+Full TypeScript typing
+
+Clean Next.js App Router structure
+
+This is exactly how a real production fight simulator backend is built.

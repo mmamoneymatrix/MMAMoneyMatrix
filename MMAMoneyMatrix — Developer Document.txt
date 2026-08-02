@@ -1,0 +1,274 @@
+MMAMoneyMatrix — Developer Documentation
+1. Overview
+MMAMoneyMatrix is a modular MMA fight simulation engine built on:
+
+Structured fighter ingestion
+
+Style-based matchup logic
+
+Monte Carlo simulation
+
+Realistic scoring and judging
+
+Finish probability modeling
+
+Bonus layers (Gym Tier + Underdog)
+
+AI explanation output
+
+The system is designed for real-world prediction, not just entertainment.
+
+2. Architecture
+Core subsystems:
+
+Fighter Data Ingestion System
+
+Matchup Logic Engine
+
+Monte Carlo Simulation Engine
+
+Finish Probability Engine
+
+Scoring & Judging Model
+
+Raw Probability Output
+
+Bonus Layer
+
+Normalization Layer
+
+Final Output + AI Explanation
+
+3. Fighter Data Ingestion System
+3.1 Data Sources
+UFC stats (striking, grappling, fight history)
+
+UFC fighter profiles (bio, stance, gym, reach, height)
+
+Record book (leaders, streaks, bonuses)
+
+AI extraction for unstructured pages
+
+Manual overrides for edge cases
+
+3.2 Fighter Object Structure
+Each fighter is stored as:
+
+Bio: name, age, height, reach, stance, weight class, country, gym
+
+Career: wins, losses, draws, KO/Sub/Dec splits, total fights, streaks, layoff, years active
+
+Striking: sig strikes per minute, absorbed per minute, accuracy, defense, knockdown rate, tempo, power index, strike differential
+
+Grappling: takedown accuracy/defense, control time, submissions, scrambles, ground-and-pound rate
+
+History: list of fights with opponent, result, method, round/time, event, notes
+
+Styles: array of tags (pressure_striker, counter_striker, wrestler, grappler, brawler, cardio_monster, etc.)
+
+Gym Tier: S/A/B + numeric bonus
+
+Underdog Level: mild/medium/strong/heavy + numeric bonus
+
+Derived Metrics: cardio index, momentum index, damage tolerance, striking/grappling differential
+
+4. Database Schema
+4.1 fighters table
+Stores fighter attributes and stats.
+
+Key fields:
+
+id, name, age, height_inches, reach_inches, stance, weight_class, country
+
+wins, losses, draws, ko_wins, sub_wins, dec_wins, ko_losses, sub_losses, dec_losses, total_fights, win_streak, layoff_days, years_active
+
+sig_str_lpm, sig_str_apm, sig_str_acc, sig_str_def, knockdown_rate, strike_tempo, strike_power_index, strike_differential
+
+td_avg, td_acc, td_def, control_time_seconds, sub_avg, scramble_success, g_and_p_rate
+
+styles (array), gym_name, gym_tier, gym_bonus, underdog_level, underdog_bonus
+
+cardio_index, momentum_index, damage_tolerance_index, grappling_differential, striking_differential
+
+4.2 fights table
+Stores fight outcomes and metadata.
+
+Key fields:
+
+id, fighter_id, opponent_id, event_name, event_date, promotion
+
+result, method, round, time
+
+weight_class, short_notice, injury_notes, altitude, location
+
+judges (array), scorecards (array)
+
+sig_str_landed, sig_str_absorbed, takedowns_landed, takedowns_attempted, control_time_seconds, submission_attempts, knockdowns
+
+damage_taken_index, damage_given_index, pace_rating, dominance_rating
+
+4.3 styles table
+Defines style tags and their impact.
+
+Key fields:
+
+id, style_name, description
+
+impact_vector (JSON: striking, grappling, pace, countering, chaos, etc.)
+
+5. Matchup Logic Engine
+5.1 Inputs
+fighterA and fighterB objects
+
+All stats, styles, derived metrics
+
+Context (short notice, altitude, weight class changes)
+
+5.2 Components
+Style vs Style Interaction: pressure vs counter, wrestler vs striker, kick-heavy vs grappler, cardio monster vs slow starter, etc.
+
+Stat Differentials: striking, grappling, cardio, derived metrics.
+
+Physical Attributes: height, reach, age, stance.
+
+Historical Patterns: common opponents, improvement/decline curves, activity level, damage accumulation.
+
+Context Factors: short notice, altitude, travel, injuries.
+
+Gym Tier Modifier: elite vs small gym advantage.
+
+5.3 Output
+Produces a fightGeometry object:
+
+rangeControl
+
+paceControl
+
+grapplingAdvantage
+
+strikingAdvantage
+
+chaosFactor
+
+cardioAdvantage
+
+earlyRoundAdvantage
+
+lateRoundAdvantage
+
+finishThreat
+
+vulnerability
+
+gymTierModifier
+
+contextModifier
+
+6. Monte Carlo Simulation Engine
+6.1 Structure
+Simulates N fights (e.g. 5,000–50,000).
+
+Each simulation runs 3 or 5 rounds.
+
+6.2 Round Engine
+Per round:
+
+Set pace using paceControl, cardioAdvantage, styles.
+
+Generate striking exchanges (accuracy, defense, power, rangeControl).
+
+Generate grappling exchanges (takedowns, control, submissions).
+
+Apply chaosFactor for wild events.
+
+Track damage and fatigue, updating fighter state.
+
+6.3 Outcomes
+If finish triggers → KO/TKO/SUB result.
+
+If no finish → pass to scoring & judging model.
+
+6.4 Aggregation
+After all simulations:
+
+Win counts per fighter.
+
+Method counts (KO/SUB/DEC).
+
+Round-of-finish counts.
+
+Convert to probabilities + confidence intervals.
+
+7. Finish Probability Engine
+7.1 Inputs
+Power index, knockdown rate, strike differential, damage tolerance.
+
+Grappling threat, control time, submission attempts.
+
+chaosFactor, finishThreat, vulnerability, fatigue.
+
+7.2 KO/TKO Logic
+Base KO chance from power, knockdowns, strike differential, accumulated damage.
+
+Modifiers from chaosFactor, cardio drop, styles (brawler, KO artist, pressure striker).
+
+7.3 Submission Logic
+Base SUB chance from submissions, grapplingAdvantage, control time, scrambles.
+
+Modifiers from fatigue, damage, styles (grappler, submission hunter).
+
+7.4 Round Distribution
+Tracks when finishes occur (R1–R5) for method-by-round probabilities.
+
+8. Scoring & Judging Model
+8.1 Inputs
+Per round:
+
+Strikes landed/absorbed, knockdowns.
+
+Control time, takedowns, submissions.
+
+Pace, pressure, damage indices.
+
+8.2 Criteria
+Effective striking.
+
+Effective grappling.
+
+Aggression & octagon control.
+
+8.3 Scoring
+10–9: clear winner.
+
+10–8: dominant round.
+
+10–7: extreme domination.
+
+Simulates multiple judges with bias profiles.
+
+8.4 Decisions
+Unanimous, split, majority, draw.
+
+Produces decision outcome probabilities.
+
+9. Bonus & Normalization
+9.1 Bonus Layer
+Gym Tier Bonus (S/A/B).
+
+Underdog Bonus (mild/medium/strong/heavy).
+
+Applied to raw probabilities.
+
+9.2 Normalization
+Ensures total probability = 100%.
+
+10. Final Output & AI Explanation
+Win probability.
+
+Method probability.
+
+Round probability.
+
+Confidence intervals.
+
+AI-generated fight breakdown and key factors.

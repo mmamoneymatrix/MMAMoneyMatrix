@@ -1,0 +1,58 @@
+"use client";
+
+import { useState } from "react";
+import { fetchFighter, runMatchup } from "@/lib/api";
+import MatchupResult from "./MatchupResult";
+
+export default function MatchupRunner() {
+  const [fighterA, setFighterA] = useState(null);
+  const [fighterB, setFighterB] = useState(null);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleRun() {
+    if (!fighterA || !fighterB) return;
+
+    setLoading(true);
+    const data = await runMatchup(fighterA.id, fighterB.id);
+    setResult(data);
+    setLoading(false);
+  }
+
+  return (
+    <div className="w-full max-w-2xl space-y-6">
+      <h2 className="text-xl font-semibold">Run Matchup</h2>
+
+      <div className="space-y-4">
+        <input
+          className="border p-2 w-full"
+          placeholder="Import Fighter A (name or UFC URL)"
+          onBlur={async (e) => {
+            const data = await fetchFighter(e.target.value);
+            setFighterA(data);
+          }}
+        />
+
+        <input
+          className="border p-2 w-full"
+          placeholder="Import Fighter B (name or UFC URL)"
+          onBlur={async (e) => {
+            const data = await fetchFighter(e.target.value);
+            setFighterB(data);
+          }}
+        />
+
+        <button
+          onClick={handleRun}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Simulate Fight
+        </button>
+      </div>
+
+      {loading && <p>Simulating 10,000 fights…</p>}
+
+      {result && <MatchupResult result={result} />}
+    </div>
+  );
+}

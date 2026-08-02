@@ -1,0 +1,273 @@
+12. Gym Quality & Training Environment Bonus
+Elite gyms produce better fighters.
+Small gyms often limit development.
+
+Gym Tier System
+Tier S — Elite Gyms (+4% to +7%)
+Examples: ATT, City Kickboxing, AKA, Jackson-Wink, Tiger Muay Thai, Xtreme Couture.
+
+Tier A — Strong Gyms (+2% to +3%)
+Examples: Elevation, Alpha Male, Fortis MMA, Kings MMA.
+
+Tier B — Small/Unknown Gyms (−1% to −3%)
+Applied after simulation, before normalization.
+
+
+12. Gym Quality & Training Environment Bonus — Expert Mode
+Elite gyms produce elite fighters.
+Small gyms produce inconsistent fighters.
+This is one of the strongest non‑statistical predictors of performance in MMA.
+
+MMAMoneyMatrix models gym quality using a tiered preparation modifier applied after raw simulation but before normalization — just like the Underdog Bonus.
+
+This ensures realism without corrupting the Monte Carlo engine.
+
+🧠 Why Gym Quality Matters (Technical Explanation)
+Gym quality affects:
+
+Cardio development
+
+Defense fundamentals
+
+Scramble ability
+
+Game planning
+
+Training partners
+
+Coaching IQ
+
+Fight preparation quality
+
+Recovery protocols
+
+Mental readiness
+
+These factors do not show up in raw stats, but they dramatically affect real fight outcomes.
+
+Elite gyms produce:
+
+better conditioned fighters
+
+smarter game plans
+
+better defensive habits
+
+better scrambling
+
+better late‑round performance
+
+better adaptation mid‑fight
+
+Small gyms produce:
+
+limited sparring partners
+
+predictable game plans
+
+weaker cardio
+
+weaker defensive habits
+
+worse scrambling
+
+worse late‑round performance
+
+So MMAMoneyMatrix adds a Gym Tier Modifier.
+
+🟥 Gym Tier System (Expert Mode)
+Tier S — Elite Gyms
+Examples:
+
+American Top Team
+
+City Kickboxing
+
+Jackson‑Wink
+
+AKA
+
+Xtreme Couture
+
+Kill Cliff FC
+
+Tiger Muay Thai
+
+Tristar
+
+Serra‑Longo
+
+Tier A — Strong Gyms
+Examples:
+
+Elevation Fight Team
+
+Team Alpha Male
+
+Kings MMA
+
+Fortis MMA
+
+Roufusport
+
+Team Quest
+
+Tier B — Small / Unknown Gyms
+Examples:
+
+Regional gyms
+
+Local MMA academies
+
+Non‑MMA specialty gyms
+
+Gyms with no UFC presence
+
+🧮 Bonus Table (Base Version)
+Gym Tier	Bonus/Penalty
+Tier S	+4% to +7%
+Tier A	+2% to +3%
+Tier B	−1% to −3%
+
+
+Now let’s go expert mode.
+
+🧠 Expert Mode: Continuous Gym Quality Function
+Instead of static tiers, MMAMoneyMatrix uses a continuous scaling function based on gym rating:
+
+𝑏
+𝑜
+𝑛
+𝑢
+𝑠
+=
+𝑐
+𝑙
+𝑎
+𝑚
+𝑝
+(
+0.02
++
+0.01
+⋅
+𝑟
+𝑎
+𝑡
+𝑖
+𝑛
+𝑔
+,
+−
+0.03
+,
+0.07
+)
+Where:
+
+rating = gym quality score (0–5)
+
+clamp ensures bonus stays between −3% and +7%
+
+Examples:
+Gym Rating	Tier	Bonus
+5	S	+7%
+4	S	+6%
+3	A	+3%
+2	A	+2%
+1	B	−1%
+0	B	−3%
+
+
+This is smoother and more realistic than a hard tier system.
+
+🧠 Expert Mode: How the Bonus Is Applied
+After the Monte Carlo simulation produces raw probabilities:
+
+Code
+rawProbA
+rawProbB
+If Fighter A trains at a better gym:
+
+Code
+rawProbA += gymBonus
+If Fighter B trains at a better gym:
+
+Code
+rawProbB += gymBonus
+Then normalize:
+
+Code
+total = rawProbA + rawProbB
+finalProbA = rawProbA / total
+finalProbB = rawProbB / total
+This ensures:
+
+total probability = 100%
+
+bonus never breaks math
+
+bonus never creates impossible outcomes
+
+🧠 Expert Mode: Gym Bonus Interaction With Other Systems
+Gym quality interacts with:
+
+1. Cardio Curve
+Elite gyms → better cardio → stronger late rounds.
+
+2. Chaos Factor
+Elite gyms → lower chaos (better defense).
+Small gyms → higher chaos (sloppy exchanges).
+
+3. Vulnerability Curve
+Elite gyms → lower vulnerability.
+Small gyms → higher vulnerability.
+
+4. Submission Chain Modeling
+Elite grappling gyms → higher control + submission threat.
+
+5. Knockdown Probability
+Elite striking gyms → better defense → fewer knockdowns.
+
+6. Scenario Analysis
+Short notice → elite gyms mitigate penalty.
+Altitude → elite gyms mitigate cardio drop.
+
+🧠 Expert Mode: Why This System Works
+✔ Matches real UFC outcomes
+Elite gyms consistently outperform raw stats.
+
+✔ Prevents overcorrection
+Bonus is small but meaningful.
+
+✔ Preserves simulation integrity
+Monte Carlo engine remains untouched.
+
+✔ Adds realism
+Gym quality is one of the strongest predictors of performance.
+
+✔ Makes your simulator feel alive
+Users instantly understand why gym matters.
+
+🧩 Final Summary (Expert Mode)
+Gym Quality Bonus is a post‑simulation modifier that adjusts probabilities based on training environment realism.
+
+It models:
+
+coaching quality
+
+training partners
+
+cardio development
+
+defensive fundamentals
+
+game planning
+
+scrambling ability
+
+fight IQ
+
+And applies a controlled bonus or penalty between −3% and +7%.
+
+This makes MMAMoneyMatrix competitive with professional fight modeling systems.

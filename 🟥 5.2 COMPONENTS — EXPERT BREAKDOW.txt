@@ -1,0 +1,433 @@
+🟥 5.2 COMPONENTS — EXPERT BREAKDOWN
+The engine evaluates six independent subsystems, each producing weighted modifiers.
+These modifiers are then fused into a single fightGeometry vector.
+
+Each subsystem is explained below at a deep technical level.
+
+⭐ 1. Style vs Style Interaction (Behavioral Vectors)
+Every style tag is represented internally as a behavioral vector:
+
+Code
+styleVector = {
+  rangeBias,
+  paceBias,
+  grapplingBias,
+  strikingBias,
+  chaosBias,
+  cardioBias,
+  earlyBias,
+  lateBias
+}
+When two fighters interact, the engine performs vector subtraction:
+
+Code
+styleDelta = fighterA.styleVector - fighterB.styleVector
+This produces directional advantages.
+
+Expert Examples
+Pressure vs Counter
+
+Pressure → +paceBias, +chaosBias
+
+Counter → +strikingBias, +rangeBias
+
+Result → counter fighter gains precision advantage, pressure fighter gains tempo advantage.
+
+Wrestler vs Striker
+
+Wrestler → +grapplingBias, +controlBias
+
+Striker → +rangeBias, +strikingBias
+
+Result → grapplingAdvantage shifts toward wrestler, strikingAdvantage shifts toward striker.
+
+Kick-heavy vs Grappler
+
+Kick-heavy → +rangeBias
+
+Grappler → +grapplingBias
+
+Result → takedown vulnerability increases for kick-heavy fighter.
+
+Cardio Monster vs Slow Starter
+
+Cardio monster → +lateBias
+
+Slow starter → +earlyBias
+
+Result → earlyRoundAdvantage shifts one way, lateRoundAdvantage shifts the other.
+
+This subsystem defines the behavioral physics of the fight.
+
+⭐ 2. Stat Differentials (Quantitative Vectors)
+The engine computes statistical deltas between fighters:
+
+Code
+statDelta = {
+  strikingDelta,
+  grapplingDelta,
+  cardioDelta,
+  derivedDelta
+}
+Striking Delta
+Derived from:
+
+accuracy
+
+defense
+
+knockdown rate
+
+strike tempo
+
+power index
+
+strike differential
+
+Grappling Delta
+Derived from:
+
+takedown accuracy
+
+takedown defense
+
+control time
+
+submission attempts
+
+scramble success
+
+Cardio Delta
+Derived from:
+
+pace rating
+
+fatigue curves
+
+damage absorption
+
+Derived Delta
+Derived from:
+
+momentum index
+
+damage tolerance index
+
+grappling differential
+
+striking differential
+
+These deltas directly influence:
+
+strikingAdvantage
+
+grapplingAdvantage
+
+cardioAdvantage
+
+⭐ 3. Physical Attributes (Biomechanical Vectors)
+Physical traits are converted into biomechanical modifiers.
+
+Height
+Controls:
+
+rangeControl
+
+clinch entry difficulty
+
+Reach
+Controls:
+
+jab effectiveness
+
+countering window
+
+defensive shell integrity
+
+Age
+Controls:
+
+cardioAdvantage
+
+vulnerability
+
+lateRoundAdvantage
+
+Stance
+Controls:
+
+rangeControl
+
+strikingAdvantage
+
+chaosFactor (switch stance unpredictability)
+
+These traits define the physical geometry of the fight.
+
+⭐ 4. Historical Patterns (Temporal Vectors)
+The engine evaluates time‑based performance trends.
+
+Common Opponents
+Produces:
+
+vulnerability patterns
+
+stylistic weaknesses
+
+stylistic strengths
+
+damage accumulation trends
+
+Improvement/Decline Curves
+Uses:
+
+rolling performance windows
+
+recent fight deltas
+
+age‑adjusted decline curves
+
+Activity Level
+Short notice → cardio penalty
+Long layoffs → timing penalty
+High activity → sharpness bonus
+
+Weight Class Changes
+Moving up → durability boost, speed penalty
+Moving down → speed boost, cardio penalty
+
+These patterns define the temporal geometry of the fight.
+
+⭐ 5. Context Factors (Environmental Vectors)
+Context is modeled as environmental modifiers.
+
+Short Notice
+cardio penalty
+
+pace penalty
+
+game plan penalty
+
+Altitude
+cardio penalty
+
+pace penalty
+
+Travel
+minor cardio penalty
+
+Injury Notes
+vulnerability increase
+
+grapplingAdvantage decrease
+
+These define the environmental geometry of the fight.
+
+⭐ 6. Gym Tier Modifier (Preparation Vector)
+Gym tier is modeled as a preparation quality vector.
+
+Tier S (Elite)
++4% to +7%
+Better:
+
+cardio
+
+defense
+
+game planning
+
+scrambling
+
+fight IQ
+
+Tier A (Strong)
++2% to +3%
+
+Tier B (Small/Unknown)
+−1% to −3%
+
+This defines the preparation geometry of the fight.
+
+🟥 5.3 OUTPUT — fightGeometry Object (Expert Breakdown)
+After processing all subsystems, the engine produces a fightGeometry vector.
+
+This vector is the mathematical blueprint for the Monte Carlo Simulation Engine.
+
+Here is the full expert breakdown of each field.
+
+fightGeometry.rangeControl
+Controls distance dynamics:
+
+reach
+
+height
+
+stance
+
+kick-heavy vs boxer
+
+wrestler entries vs striker range
+
+Positive → Fighter A controls range
+Negative → Fighter B controls range
+
+fightGeometry.paceControl
+Controls tempo:
+
+pressure
+
+volume
+
+cardio
+
+slow/fast starter
+
+fatigue curves
+
+Positive → Fighter A dictates pace
+Negative → Fighter B dictates pace
+
+fightGeometry.grapplingAdvantage
+Controls grappling dominance:
+
+takedown accuracy
+
+takedown defense
+
+control time
+
+submission threat
+
+scramble success
+
+Positive → Fighter A grappling advantage
+Negative → Fighter B grappling advantage
+
+fightGeometry.strikingAdvantage
+Controls striking dominance:
+
+accuracy
+
+defense
+
+knockdown rate
+
+strike differential
+
+power index
+
+countering vs pressure dynamics
+
+Positive → Fighter A striking advantage
+Negative → Fighter B striking advantage
+
+fightGeometry.chaosFactor
+Controls volatility:
+
+brawler style
+
+low defense
+
+high power
+
+fast starter volatility
+
+scrambler unpredictability
+
+Higher chaos → more knockdowns, scrambles, momentum swings.
+
+fightGeometry.cardioAdvantage
+Controls endurance:
+
+cardio monster
+
+slow starter
+
+late-round performance
+
+damage absorption
+
+fatigue curves
+
+Positive → Fighter A cardio advantage
+Negative → Fighter B cardio advantage
+
+fightGeometry.earlyRoundAdvantage
+Controls round 1–2 dynamics:
+
+fast starter
+
+explosive power
+
+early aggression
+
+Positive → Fighter A early-round advantage
+Negative → Fighter B early-round advantage
+
+fightGeometry.lateRoundAdvantage
+Controls round 3–5 dynamics:
+
+cardio monster
+
+slow starter
+
+durable fighters
+
+pace control
+
+Positive → Fighter A late-round advantage
+Negative → Fighter B late-round advantage
+
+fightGeometry.finishThreat
+Controls finishing probability:
+
+power index
+
+knockdown rate
+
+submission threat
+
+chaos factor
+
+opponent vulnerability
+
+Higher → more KO/TKO/SUB probability.
+
+fightGeometry.vulnerability
+Controls likelihood of being finished:
+
+low defense
+
+poor damage tolerance
+
+bad cardio
+
+bad scrambling
+
+age decline
+
+Higher → more likely to get KO’d or subbed.
+
+fightGeometry.gymTierModifier
+Controls preparation quality:
+
+elite gym advantage
+
+small gym penalty
+
+Positive → Fighter A gym advantage
+Negative → Fighter B gym advantage
+
+fightGeometry.contextModifier
+Controls environmental realism:
+
+short notice
+
+altitude
+
+travel
+
+injury notes
+
+Positive → Fighter A context advantage
+Negative → Fighter B context advantage

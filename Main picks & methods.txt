@@ -1,0 +1,254 @@
+Main picks & methods
+Uroš Medić vs Geoff Neal  
+Pick: Medić
+Method: TKO
+Round: 2
+Logic: High distance accuracy, strong body/head mix, Neal’s defensive lapses vs volume southpaws.
+
+Ludovit Klein vs Tofiq Musayev  
+Pick: Klein
+Method: Decision (29–28)
+Round: 3
+Logic: Better SIG STR LPM, higher TD mix, southpaw angles vs aging Musayev; Musayev still dangerous but out‑volumed.
+
+Oban Elliott vs Michael Oliveira  
+Pick: Oliveira
+Method: TKO
+Round: 2
+Logic: Huge striking volume (8.40 LPM), reach edge, Elliott’s defensive gaps under pressure.
+
+Borislav Nikolić vs Mark Vologdin  
+Pick: Nikolić
+Method: Submission (RNC)
+Round: 3
+Logic: Reach, cardio, championship experience, diverse subs vs shorter explosive finisher who fades late.
+
+Jan Blachowicz vs Navajo Stirling  
+Pick: Blachowicz
+Method: Decision (30–27)
+Round: 3
+Logic: Elite experience, body/leg work, ground control; Stirling dangerous but out‑classed over time.
+
+Aleksandar Rakic vs Marcin Tybura  
+Pick: Rakic
+Method: Decision (29–28)
+Round: 3
+Logic: Cleaner distance striking, better leg‑kick game, Tybura’s durability keeps him in but loses minutes.
+
+Milos Janicic vs Noah Gugnon  
+Pick: Janicic
+Method: TKO
+Round: 2
+Logic: Higher‑level experience, finishing rate, Gugnon live early but out‑skilled in exchanges.
+
+Čepo vs Gilbert Urbina  
+Pick: Čepo
+Method: Decision
+Round: 3
+Logic: More consistent output, better durability profile; Urbina has moments but loses on volume.
+
+Duško Todorović vs Valentin  
+Pick: Todorović
+Method: TKO
+Round: 2
+Logic: Chaos fighter, defensive flaws but big offense; Valentin’s defense cracks under sustained pressure.
+
+
+
+
+1. Dennis Buzukja vs Bogdan Grad
+Featherweight · USA vs Austria
+12‑6‑0 vs 15‑4‑0
+
+📌 Core Stats
+Category	Buzukja	Grad	Edge
+SIG STR LPM	4.21	4.06	Even
+Accuracy	47.8%	55.2%	Grad
+TD Avg	0.62	4.22	Grad
+TD Acc	27%	40.6%	Grad
+Reach	70.5"	70"	Buzukja
+Age	28	30	Buzukja
+Stance	Switch	Orthodox	—
+
+
+📌 Read
+This is a classic striker vs wrestler matchup.
+
+Grad’s 4.22 takedowns per fight is elite.
+
+Buzukja has poor TDD historically.
+
+Grad’s accuracy is significantly better.
+
+Buzukja’s only path is out‑striking early and keeping it standing.
+
+🧪 Simulation
+R1: Grad wrestles immediately → top control → 10‑9 Grad
+R2: Buzukja tries to strike but gets clinched → 10‑9 Grad
+R3: Grad slows but still controls → 10‑9 Grad
+
+🟥 Prediction: Bogdan Grad wins — Decision (30‑27)
+Confidence: High
+Buzukja KO chance: Only early, low probability.
+
+🟥 2. Mateusz Rębecki vs Kyle Prepolec
+Lightweight · Poland vs Canada
+20‑5‑0 vs 18‑10‑0
+
+📌 Core Stats
+Category	Rebecki	Prepolec	Edge
+SIG STR LPM	4.79	3.25	Rebecki
+Accuracy	52.4%	34.8%	Rebecki
+TD Avg	3.05	0.00	Rebecki
+TD Acc	48.8%	0%	Rebecki
+SUB Avg	0.44	0.00	Rebecki
+Reach	66"	70"	Prepolec
+Age	33	36	Rebecki
+
+
+📌 Read
+This is a massive mismatch:
+
+Prepolec has 0 takedown threat.
+
+Rebecki has elite wrestling + high pace + high accuracy.
+
+Prepolec’s reach helps early but he gets overwhelmed.
+
+Rebecki’s cardio and pressure break him down.
+
+🧪 Simulation
+R1: Rebecki takedown → heavy top control → 10‑9
+R2: Prepolec slows → Rebecki GNP → TKO threat
+R3: Rebecki finishes
+
+🟥 Prediction: Mateusz Rębecki wins — TKO Round 2
+Confidence: Extremely high.
+
+🟥 3. Nina Milošević vs Hailey Cowan
+Women’s Bantamweight · Australia vs USA
+8‑1‑0 vs 7‑5‑0
+
+📌 Read
+Cowan is:
+
+Low volume
+
+Low accuracy
+
+Low finishing
+
+Struggles with pressure
+
+Very inconsistent
+
+Milošević is:
+
+High pace
+
+Strong clinch
+
+Better finishing
+
+Better cardio
+
+More durable
+
+This is one of the cleanest reads on the women’s side.
+
+🧪 Simulation
+R1: Milošević pressure → 10‑9
+R2: Cowan slows → clinch domination → 10‑9
+R3: Milošević lands 30–40 strikes → 10‑9
+
+🟥 Prediction: Nina Milošević wins — Decision (30‑27)
+Confidence: High.
+
+🟥 4. Jovan Leka vs Alexander Poppeck
+Heavyweight · Serbia vs Germany
+13‑2‑0 vs 21‑5‑0
+
+📌 Read
+Poppeck:
+
+Very technical
+
+Good defense
+
+Good cardio for HW
+
+Strong clinch
+
+Strong leg kicks
+
+Wins minutes consistently
+
+Leka:
+
+Explosive
+
+KO power
+
+Low volume
+
+Fades after R1
+
+Struggles with leg kicks
+
+This is a classic HW dynamic: power vs technique.
+
+🧪 Simulation
+R1: Leka dangerous early → Poppeck survives → 10‑9 Poppeck
+R2: Poppeck leg kicks + clinch → 10‑9
+R3: Leka fades → Poppeck dominates → 10‑9
+
+🟥 Prediction: Alexander Poppeck wins — Decision (30‑27)
+Confidence: Medium‑high
+Leka KO chance: Only Round 1.
+
+🟥 5. Marina Spasić vs Stephanie Luciano
+Women’s Strawweight · Serbia vs Brazil
+7‑1‑0 vs 7‑2‑1
+
+📌 Read
+Spasić:
+
+Very sharp striking
+
+Good accuracy
+
+Good movement
+
+Strong defense
+
+Better finishing
+
+Luciano:
+
+High volume
+
+Good cardio
+
+Good scrambles
+
+Lower accuracy
+
+Lower power
+
+This is volume vs precision.
+
+🧪 Simulation
+R1: Spasić lands cleaner → 10‑9
+R2: Luciano increases pace → close round → 10‑9 Spasić
+R3: Spasić counters → 10‑9
+
+🟥 Prediction: Marina Spasić wins — Decision (30‑27)
+Confidence: Medium.
+
+🟩 FULL SUMMARY (All Picks)
+Fight	Winner	Method	Round
+Buzukja vs Grad	Grad	Decision	3
+Rebecki vs Prepolec	Rebecki	TKO	2
+Milošević vs Cowan	Milošević	Decision	3
+Leka vs Poppeck	Poppeck	Decision	3
+Spasić vs Luciano	Spasić	Decision	3

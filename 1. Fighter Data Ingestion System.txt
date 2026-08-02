@@ -1,0 +1,418 @@
+1. Fighter Data Ingestion System (Advanced Breakdown)
+This is the foundation of MMAMoneyMatrix.
+Everything your simulator does — styles, matchup logic, Monte Carlo simulation, judging, bonuses — depends on the quality and structure of this ingestion layer.
+
+Below is the full, expanded, technical breakdown of how your Fighter Data Ingestion System works.
+
+🧩 1.1 Data Sources
+Your ingestion system pulls fighter information from multiple structured and semi‑structured sources:
+
+A. UFC Stats (Primary Source)
+Public, legal, structured
+
+Provides striking, grappling, and fight history
+
+Consistent formatting
+
+Machine‑readable tables
+
+B. UFC.com Fighter Profiles
+Bio data
+
+Gym affiliation
+
+Stance
+
+Height / reach
+
+Weight class
+
+Country
+
+C. UFC Record Book
+KO leaders
+
+Submission leaders
+
+Accuracy leaders
+
+Defense leaders
+
+Win streaks
+
+Bonuses
+
+Total fights
+
+D. AI Extraction Layer
+When a page is unstructured, your backend sends the URL to your AI extraction endpoint, which returns:
+
+Clean JSON
+
+Parsed stats
+
+Parsed bio
+
+Parsed history
+
+E. Manual Overrides
+If a fighter has:
+
+Changed gyms
+
+Moved weight classes
+
+Fought outside UFC
+
+Has unique circumstances
+You can override fields manually.
+
+🧩 1.2 Data Categories (Deep Breakdown)
+Your ingestion system organizes fighter data into six major categories, each with sub‑layers.
+
+1.2.1 Bio Layer
+This is the simplest layer but extremely important for matchup logic.
+
+Includes:
+
+Name
+
+Age
+
+Height
+
+Reach
+
+Stance
+
+Weight class
+
+Country
+
+Gym (NEW)
+
+Team (if multiple gyms)
+
+Why it matters
+Age affects cardio decline
+
+Height/reach affect striking range
+
+Stance affects style matchups
+
+Gym affects probability bonuses
+
+Weight class affects pace and power
+
+1.2.2 Career Layer
+This layer tracks long‑term fighter performance.
+
+Includes:
+
+Total fights
+
+Wins / losses / draws
+
+KO/TKO wins
+
+Submission wins
+
+Decision wins
+
+Win streaks
+
+Bonuses
+
+Layoff time
+
+Activity level
+
+Years active
+
+Why it matters
+Win streaks affect confidence
+
+Layoff affects cardio and timing
+
+Bonuses indicate finishing ability
+
+Activity level affects sharpness
+
+1.2.3 Striking Layer (Advanced Metrics)
+This is one of the most important layers.
+
+Includes:
+
+Sig strikes landed per minute
+
+Sig strikes absorbed per minute
+
+Accuracy
+
+Defense
+
+Knockdown rate
+
+Knockdown defense
+
+Distance striking tendencies
+
+Clinch striking tendencies
+
+Ground striking tendencies
+
+Strike differential
+
+Strike tempo
+
+Strike power index (derived)
+
+Why it matters
+Your simulator uses these to model:
+
+Damage
+
+Pace
+
+Momentum
+
+Knockdown probability
+
+Round scoring
+
+Finish probability
+
+1.2.4 Grappling Layer (Advanced Metrics)
+Includes:
+
+Takedown accuracy
+
+Takedown defense
+
+Control time
+
+Submission attempts
+
+Submission defense
+
+Scramble success
+
+Ground‑and‑pound frequency
+
+Top control vs bottom control ratio
+
+Takedown chain attempts
+
+Clinch control
+
+Why it matters
+Your simulator uses these to model:
+
+Control scoring
+
+Grappling dominance
+
+Submission threat
+
+Ground finish probability
+
+Round scoring
+
+Judge bias interaction
+
+1.2.5 Fight History Layer
+This is the most complex layer.
+
+Each fight includes:
+
+Opponent
+
+Result
+
+Method
+
+Round/time
+
+Event
+
+Weight class
+
+Notes (injury, short notice, altitude, etc.)
+
+Derived metrics
+Your simulator calculates:
+
+Improvement over time
+
+Decline over time
+
+Style vulnerabilities
+
+Style strengths
+
+Common opponent comparisons
+
+Damage accumulation over career
+
+1.2.6 Style Layer (Tag System)
+Your style system is one of the strongest parts of MMAMoneyMatrix.
+
+Tags include:
+
+Pressure striker
+
+Counter striker
+
+Wrestler
+
+Grappler
+
+Point fighter
+
+Brawler
+
+Kick-heavy
+
+Clinch-heavy
+
+Cardio monster
+
+Slow starter
+
+Fast starter
+
+KO artist
+
+Submission hunter
+
+Scrambler
+
+Volume striker
+
+Low-volume power striker
+
+Why it matters
+These tags directly feed into:
+
+Style vs style matchup logic
+
+Round simulation
+
+Finish probability
+
+Pace modeling
+
+Judge bias modeling
+
+🧩 1.3 Data Cleaning & Normalization
+Your ingestion system performs multiple cleaning steps:
+
+A. Standardization
+Convert height to inches
+
+Convert reach to inches
+
+Convert control time to seconds
+
+Normalize accuracy percentages
+
+Normalize strike rates
+
+B. Error Correction
+Remove duplicate fights
+
+Fix missing stats
+
+Correct weight class changes
+
+Handle fighters with incomplete data
+
+C. Derived Metrics
+Your system calculates:
+
+Strike differential
+
+Grappling differential
+
+Power index
+
+Cardio index
+
+Momentum index
+
+Damage tolerance index
+
+These are used heavily in simulation.
+
+🧩 1.4 Gym Tier Integration (NEW)
+Your ingestion system now includes gym data:
+
+Gym Tier S (Elite)
+Bonus: +4% to +7%
+
+Gym Tier A (Strong)
+Bonus: +2% to +3%
+
+Gym Tier B (Small/Unknown)
+Penalty: −1% to −3%
+
+This is stored in the fighter profile and applied after simulation.
+
+🧩 1.5 Underdog Flag Integration (NEW)
+Your ingestion system marks fighters as:
+
+Mild underdog
+
+Medium underdog
+
+Strong underdog
+
+Heavy underdog
+
+This is used to apply the Underdog Bonus after simulation.
+
+🧩 1.6 Final Output of Ingestion Layer
+After ingestion, each fighter becomes a fully structured object:
+
+Code
+{
+  bio: {...},
+  career: {...},
+  striking: {...},
+  grappling: {...},
+  history: [...],
+  styles: [...],
+  gymTier: "S",
+  underdogLevel: "Medium",
+  derivedMetrics: {...}
+}
+This object feeds directly into:
+
+Matchup logic
+
+Monte Carlo simulation
+
+Scoring model
+
+Bonus layer
+
+AI explanation layer
+
+🥋 Summary
+Your Fighter Data Ingestion System is:
+
+Deep
+
+Structured
+
+Multi-layered
+
+Context-aware
+
+Style-aware
+
+Bonus-aware
+
+Simulation-ready
+
+It is far more advanced than anything used in public MMA simulators.

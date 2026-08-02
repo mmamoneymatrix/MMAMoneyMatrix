@@ -1,0 +1,275 @@
+🟥 1. fighters table (Advanced Breakdown)
+This table stores every fighter’s full profile, including raw stats, derived stats, style tags, gym tier, and metadata.
+
+Think of this table as the fighter’s identity + capabilities + history summary.
+
+Schema Breakdown
+Primary Fields
+id — unique fighter ID
+
+name — full name
+
+nickname — optional
+
+age — integer
+
+height_inches — normalized height
+
+reach_inches — normalized reach
+
+stance — orthodox / southpaw / switch
+
+weight_class — string
+
+country — string
+
+Career Fields
+wins
+
+losses
+
+draws
+
+ko_wins
+
+sub_wins
+
+dec_wins
+
+ko_losses
+
+sub_losses
+
+dec_losses
+
+total_fights
+
+win_streak
+
+layoff_days
+
+years_active
+
+Striking Metrics
+sig_str_lpm — significant strikes landed per minute
+
+sig_str_apm — absorbed per minute
+
+sig_str_acc — accuracy
+
+sig_str_def — defense
+
+knockdown_rate
+
+strike_tempo
+
+strike_power_index (derived)
+
+strike_differential (derived)
+
+Grappling Metrics
+td_avg — takedowns per 15 minutes
+
+td_acc — takedown accuracy
+
+td_def — takedown defense
+
+control_time_seconds
+
+sub_avg — submissions per 15 minutes
+
+scramble_success
+
+g_and_p_rate — ground-and-pound frequency
+
+Style Tags
+Stored as an array:
+
+Code
+["pressure_striker", "kick_heavy", "cardio_monster"]
+Gym Tier (NEW)
+gym_name
+
+gym_tier — S / A / B
+
+gym_bonus — numeric bonus applied post-simulation
+
+Underdog Level (NEW)
+underdog_level — mild / medium / strong / heavy
+
+underdog_bonus — numeric bonus applied post-simulation
+
+Derived Metrics
+cardio_index
+
+momentum_index
+
+damage_tolerance_index
+
+grappling_differential
+
+striking_differential
+
+🟥 2. fights table (Advanced Breakdown)
+This table stores every fight a fighter has ever had, including UFC, regional, and other promotions if you choose to import them.
+
+This is the historical backbone of your simulator.
+
+Schema Breakdown
+Primary Fields
+id — unique fight ID
+
+fighter_id — FK → fighters.id
+
+opponent_id — FK → fighters.id
+
+event_name
+
+event_date
+
+promotion — UFC / Bellator / PFL / regional
+
+Outcome Fields
+result — win / loss / draw / NC
+
+method — KO / TKO / SUB / DEC / DQ / NC
+
+round — integer
+
+time — mm:ss
+
+Context Fields
+weight_class
+
+short_notice — boolean
+
+injury_notes — text
+
+altitude — boolean
+
+location — city/country
+
+judges — array of judge names
+
+scorecards — array of scorecards
+
+Statistical Fields
+sig_str_landed
+
+sig_str_absorbed
+
+takedowns_landed
+
+takedowns_attempted
+
+control_time_seconds
+
+submission_attempts
+
+knockdowns
+
+Derived Fields
+damage_taken_index
+
+damage_given_index
+
+pace_rating
+
+dominance_rating
+
+🟥 3. styles table (Advanced Breakdown)
+This table stores style tags, which are applied to fighters to define how they behave in simulations.
+
+These tags are the DNA of your matchup logic engine.
+
+Schema Breakdown
+Primary Fields
+id — unique style ID
+
+style_name — string
+
+description — text
+
+impact_vector — JSON describing how the style affects simulation
+
+Example:
+
+Code
+{
+  "striking": +0.12,
+  "grappling": -0.05,
+  "pace": +0.20,
+  "countering": +0.30
+}
+🥋 List of Style Tags (Advanced Definitions)
+Striking Styles
+Pressure striker — pushes pace, increases tempo, raises damage probability
+
+Counter striker — increases precision, knockdown probability
+
+Point fighter — high volume, low power, decision-heavy
+
+Brawler — high power, low defense, chaos generator
+
+Kick-heavy — long-range striking, distance control
+
+Clinch-heavy — cage control, dirty boxing
+
+Grappling Styles
+Wrestler — takedown pressure, control scoring
+
+Grappler — submission threat, scramble advantage
+
+Scrambler — reversals, transitions, momentum swings
+
+Pace & Conditioning Styles
+Cardio monster — late-round dominance
+
+Slow starter — weak round 1, strong round 3+
+
+Fast starter — strong round 1, cardio drop-off
+How These Tables Work Together
+fighters table
+Provides:
+
+identity
+
+stats
+
+styles
+
+gym tier
+
+underdog level
+
+fights table
+Provides:
+
+history
+
+context
+
+performance trends
+
+damage accumulation
+
+styles table
+Provides:
+
+behavioral logic
+
+matchup modifiers
+
+simulation vectors
+
+Together, they form the complete fighter model used by:
+
+Matchup logic
+
+Monte Carlo simulation
+
+Scoring model
+
+Bonus layer
+
+AI explanation layer

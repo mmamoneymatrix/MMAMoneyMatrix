@@ -1,0 +1,23 @@
+export async function fetchFighter(query: string) {
+  const res = await fetch(`/api/fighters/import`, {
+    method: "POST",
+    body: JSON.stringify({ query }),
+  });
+  return res.json();
+}
+
+export async function runMatchup(fighterA: string, fighterB: string) {
+  const res = await fetch(`/api/matchup/run`, {
+    method: "POST",
+    body: JSON.stringify({ fighterA, fighterB }),
+  });
+  return res.json();
+}
+
+export async function runScenario(fighterA: string, fighterB: string, scenario: string) {
+  const res = await fetch(`/api/matchup/scenario`, {
+    method: "POST",
+    body: JSON.stringify({ fighterA, fighterB, scenario }),
+  });
+  return res.json();
+}

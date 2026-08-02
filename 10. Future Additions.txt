@@ -1,0 +1,16 @@
+10. Future Additions
+Planned:
+
+Full card simulation
+
+Parlay optimizer
+
+Correlation matrix
+
+Upset probability detector
+
+Live fight scoring model
+
+Auto-import entire UFC roster
+
+Auto-update after every event

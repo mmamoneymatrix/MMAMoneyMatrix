@@ -1,0 +1,10 @@
+7. AI Interpretation Layer
+After simulation, the AI layer:
+
+Reads the output
+
+Summarizes the matchup
+
+Explains probability drivers
+
+Highlights key variables

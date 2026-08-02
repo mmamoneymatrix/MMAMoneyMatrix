@@ -1,0 +1,269 @@
+9. Backend API Routes
+/api/import-fighter
+
+/api/run-simulation
+
+/api/get-fighter
+
+/api/get-history
+
+
+
+Next.js Page Structure (App Router)
+This is the modern Next.js 13+ App Router layout.
+It reflects your full frontend flow:
+
+Import fighter
+
+View fighter profile
+
+Run matchup
+
+Display probabilities
+
+Method breakdown
+
+Confidence ranges
+
+Scenario analysis
+
+Code
+app/
+│
+├── layout.tsx
+├── page.tsx                // Home: Fighter Import + Matchup Runner
+│
+├── fighters/
+│   ├── page.tsx            // Fighter list
+│   ├── [id]/
+│       └── page.tsx        // Fighter profile
+│
+├── matchup/
+│   └── page.tsx            // Run matchup + show results
+│
+├── components/
+│   ├── FighterImport.tsx
+│   ├── FighterCard.tsx
+│   ├── FighterProfile.tsx
+│   ├── MatchupRunner.tsx
+│   ├── MatchupResult.tsx
+│   ├── MethodBreakdown.tsx
+│   ├── ConfidenceRanges.tsx
+│   ├── ScenarioPanel.tsx
+│   ├── ProbabilityChart.tsx
+│   ├── LoadingSimulation.tsx
+│
+├── lib/
+│   ├── api.ts              // fetchers for fighters, matchup, scenarios
+│   ├── types.ts            // Fighter, MatchupResult, Scenario types
+│
+└── styles/
+    └── globals.css
+This is the cleanest, scalable structure for your simulator.
+
+🧩 pages/index.tsx Version (If You Prefer Pages Router)
+If you want the older Pages Router:
+
+Code
+pages/
+│
+├── index.tsx               // Home: Fighter Import + Matchup Runner
+│
+├── fighters/
+│   ├── index.tsx           // Fighter list
+│   ├── [id].tsx            // Fighter profile
+│
+├── matchup/
+│   └── index.tsx           // Run matchup + show results
+│
+├── api/
+│   ├── fighters/
+│   │   ├── import.ts
+│   │   └── [id].ts
+│   ├── matchup/
+│       └── run.ts
+│   └── scenario/
+│       └── run.ts
+🧩 Component Map (Expert Mode)
+This is the full UI component architecture, showing how everything connects.
+
+1. <FighterImport />
+Purpose: Import fighters into the system.
+
+Used in:  
+app/page.tsx
+
+Responsibilities:
+
+Search fighter by name
+
+Import fighter by UFC URL
+
+Display import success
+
+Set fighterA or fighterB in parent state
+
+2. <FighterCard />
+Purpose: Display fighter summary.
+
+Used in:  
+/fighters, /fighters/[id], matchup pages
+
+Responsibilities:
+
+Show name, record, gym, styles
+
+Click → navigate to fighter profile
+
+3. <FighterProfile />
+Purpose: Full fighter breakdown.
+
+Used in:  
+/fighters/[id]
+
+Responsibilities:
+
+Bio
+
+Career stats
+
+Striking metrics
+
+Grappling metrics
+
+Style tags
+
+Derived metrics
+
+4. <MatchupRunner />
+Purpose: Select Fighter A + Fighter B → run simulation.
+
+Used in:  
+app/page.tsx
+
+Responsibilities:
+
+Choose fighters
+
+Call /api/matchup/run
+
+Show <LoadingSimulation />
+
+Pass results to <MatchupResult />
+
+5. <MatchupResult />
+Purpose: Display the full simulation output.
+
+Used in:  
+/matchup/page.tsx
+
+Responsibilities:
+
+Win probability
+
+Method breakdown
+
+Round breakdown
+
+Confidence ranges
+
+AI explanation
+
+Scenario toggles
+
+6. <MethodBreakdown />
+Purpose: KO/TKO, SUB, DEC probabilities.
+
+Used in:  
+<MatchupResult />
+
+Responsibilities:
+
+Show method percentages
+
+Show method-by-round charts
+
+Color-coded bars
+
+7. <ConfidenceRanges />
+Purpose: Show confidence intervals.
+
+Used in:  
+<MatchupResult />
+
+Responsibilities:
+
+95% CI
+
+High/Medium/Low confidence labels
+
+Error bars
+
+8. <ScenarioPanel />
+Purpose: Scenario analysis.
+
+Used in:  
+<MatchupResult />
+
+Responsibilities:
+
+Toggles:
+
+Short notice
+
+Altitude
+
+5-round fight
+
+Remove gym bonus
+
+Calls /api/matchup/scenario
+
+Shows probability shifts
+
+9. <ProbabilityChart />
+Purpose: Visual probability display.
+
+Used in:  
+<MatchupResult />, <MethodBreakdown />
+
+Responsibilities:
+
+Donut charts
+
+Bar charts
+
+Stacked charts
+
+10. <LoadingSimulation />
+Purpose: Simulation progress indicator.
+
+Used in:  
+<MatchupRunner />
+
+Responsibilities:
+
+“Simulating 10,000 fights…”
+
+Animated progress bar
+
+🧩 How They Connect (Flow Diagram)
+Code
+<FighterImport />
+      ↓
+<FighterCard />
+      ↓
+<FighterProfile />
+      ↓
+<MatchupRunner />
+      ↓
+<LoadingSimulation />
+      ↓
+<MatchupResult />
+      ├── <ProbabilityChart />
+      ├── <MethodBreakdown />
+      ├── <ConfidenceRanges />
+      └── <ScenarioPanel />
+This is the complete frontend architecture for your simulator.
+
+If you want next:

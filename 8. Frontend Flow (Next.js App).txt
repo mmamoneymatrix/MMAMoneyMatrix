@@ -1,0 +1,109 @@
+8. Frontend Flow (Next.js App)
+Here’s an expert-mode breakdown of that flow, step by step, like you’d put in dev docs.
+
+1. Import fighter
+Action: User selects or searches a fighter (by name, ID, or UFC URL).
+
+Frontend behavior:
+
+Form/input: text field + optional “Import from UFC URL” field.
+
+Call: POST /api/fighters/import or GET /api/fighters/:id.
+
+Result: fighter object returned and stored in state (e.g. fighterA, fighterB).
+
+UX tip: Show a “Fighter imported” card with key stats (name, record, gym, styles).
+
+2. View fighter profile
+Action: User clicks a fighter card.
+
+Frontend behavior:
+
+Route: /fighters/[id] or modal.
+
+Display:
+
+Bio (age, height, reach, stance, weight class, country, gym).
+
+Career summary (record, streaks, bonuses).
+
+Striking & grappling metrics.
+
+Style tags (chips/pills).
+
+UX tip: Use sections with small charts (bar charts for striking vs grappling, etc.).
+
+3. Run matchup
+Action: User selects Fighter A + Fighter B → clicks “Run Matchup”.
+
+Frontend behavior:
+
+Call: POST /api/matchup/run with both fighter IDs.
+
+Backend: runs Matchup Logic → Monte Carlo → Finish Engine → Scoring.
+
+State: store matchupResult object.
+
+UX tip: Show a loading state like “Simulating 10,000 fights…” with a progress bar.
+
+4. Display probabilities
+Action: After simulation completes.
+
+Frontend behavior:
+
+Show:
+
+Overall win probability (A vs B).
+
+Method breakdown (KO/TKO, SUB, DEC).
+
+Optional: implied odds.
+
+UX tip: Use a clean probability bar or donut chart for each fighter.
+
+5. Show method breakdown
+Action: User clicks “Method breakdown” or scrolls.
+
+Frontend behavior:
+
+Display:
+
+KO/TKO % by fighter.
+
+SUB % by fighter.
+
+DEC % by fighter.
+
+Optional: stacked bar chart or side-by-side cards.
+
+UX tip: Color-code methods (red for KO, blue for SUB, gray for DEC).
+
+6. Show confidence ranges
+Action: User wants to see how “solid” the numbers are.
+
+Frontend behavior:
+
+Display:
+
+Confidence intervals (e.g. 95% CI) around win probability.
+
+Maybe “High/Medium/Low confidence” labels.
+
+UX tip: Small error bars or shaded bands on charts.
+
+7. Show scenario analysis
+Action: User toggles scenarios (e.g. “5-round fight”, “short notice”, “altitude”, “no elite gym bonus”).
+
+Frontend behavior:
+
+Controls:
+
+Switches / dropdowns for scenarios.
+
+Call: POST /api/matchup/scenario with scenario flags.
+
+Display:
+
+How probabilities shift under each scenario.
+
+UX tip: Side-by-side comparison: “Base” vs “Scenario” cards.

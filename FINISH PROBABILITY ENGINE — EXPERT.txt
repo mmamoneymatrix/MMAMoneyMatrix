@@ -1,0 +1,609 @@
+FINISH PROBABILITY ENGINE — EXPERT MODE (KO/SUB Probability Curves)
+The Finish Probability Engine models inside‑the‑distance outcomes using hazard functions, damage accumulation curves, and style‑driven volatility.
+
+This subsystem determines:
+
+KO/TKO probability
+
+Submission probability
+
+Round of finish
+
+Finish timing distribution
+
+Chaos‑driven spikes
+
+Vulnerability curves
+
+Below is the full expert breakdown.
+
+🟥 1. Core Concept: Hazard Functions
+A finish is modeled as a hazard event — a probability that increases or decreases over time based on:
+
+damage
+
+fatigue
+
+power
+
+grappling dominance
+
+chaos
+
+vulnerability
+
+The engine uses a round‑based hazard function:
+
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+=
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
++
+𝐻
+𝑆
+𝑈
+𝐵
+(
+𝑡
+)
+Where 
+𝑡
+ is time within the fight.
+
+Each hazard is computed separately.
+
+🟥 2. KO/TKO Probability Curve
+KO probability is modeled using a power‑weighted hazard function:
+
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
+=
+𝑃
+⋅
+𝐷
+(
+𝑡
+)
+⋅
+𝑉
+⋅
+𝐶
+⋅
+𝐹
+(
+𝑡
+)
+Where:
+
+P = Power Index
+Derived from:
+
+knockdown rate
+
+strike power index
+
+strike differential
+
+style tags (KO artist, brawler)
+
+D(t) = Damage Accumulation Curve
+Damage increases KO probability exponentially:
+
+𝐷
+(
+𝑡
+)
+=
+1
+−
+𝑒
+−
+𝑘
+⋅
+𝑑
+𝑎
+𝑚
+𝑎
+𝑔
+𝑒
+(
+𝑡
+)
+Where:
+
+𝑘
+ = sensitivity constant
+
+damage(t) = cumulative damage from strikes, knockdowns, GNP
+
+V = Vulnerability Index
+Derived from:
+
+defense
+
+damage tolerance
+
+age decline
+
+cardio drop
+
+style tags (low defense, brawler)
+
+C = Chaos Factor
+Chaos increases volatility:
+
+𝐶
+=
+1
++
+𝑐
+ℎ
+𝑎
+𝑜
+𝑠
+𝐵
+𝑖
+𝑎
+𝑠
+ChaosBias comes from:
+
+brawler
+
+scrambler
+
+fast starter
+
+low defense
+
+high power
+
+F(t) = Fatigue Curve
+Fatigue reduces defense and increases KO probability:
+
+𝐹
+(
+𝑡
+)
+=
+1
++
+𝑓
+𝑎
+𝑡
+𝑖
+𝑔
+𝑢
+𝑒
+(
+𝑡
+)
+Fatigue(t) is derived from:
+
+cardio index
+
+pace
+
+damage taken
+
+round number
+
+🟥 3. Submission Probability Curve
+Submission probability uses a grappling‑weighted hazard function:
+
+𝐻
+𝑆
+𝑈
+𝐵
+(
+𝑡
+)
+=
+𝑆
+⋅
+𝐺
+(
+𝑡
+)
+⋅
+𝐶
+𝑔
+⋅
+𝐹
+(
+𝑡
+)
+Where:
+
+S = Submission Threat Index
+Derived from:
+
+submission attempts
+
+submission accuracy
+
+style tags (grappler, submission hunter)
+
+G(t) = Grappling Dominance Curve
+Grappling dominance increases submission probability:
+
+𝐺
+(
+𝑡
+)
+=
+𝛼
+⋅
+𝑐
+𝑜
+𝑛
+𝑡
+𝑟
+𝑜
+𝑙
+(
+𝑡
+)
++
+𝛽
+⋅
+𝑡
+𝑎
+𝑘
+𝑒
+𝑑
+𝑜
+𝑤
+𝑛
+𝑠
+(
+𝑡
+)
++
+𝛾
+⋅
+𝑝
+𝑜
+𝑠
+𝑖
+𝑡
+𝑖
+𝑜
+𝑛
+𝑠
+(
+𝑡
+)
+Where:
+
+control(t) = control time
+
+takedowns(t) = takedowns landed
+
+positions(t) = dominant positions (mount, back)
+
+α, β, γ = weighting constants
+
+C_g = Chaos Grappling Factor
+Scrambles increase submission volatility:
+
+𝐶
+𝑔
+=
+1
++
+𝑠
+𝑐
+𝑟
+𝑎
+𝑚
+𝑏
+𝑙
+𝑒
+𝐵
+𝑖
+𝑎
+𝑠
+F(t) = Fatigue Curve
+Same fatigue curve used for KO hazard.
+
+Fatigue increases submission likelihood because tired fighters:
+
+defend slower
+
+react slower
+
+give up positions
+
+🟥 4. Combined Finish Hazard
+The total finish hazard at time 
+𝑡
+:
+
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+=
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
++
+𝐻
+𝑆
+𝑈
+𝐵
+(
+𝑡
+)
+This is used to compute the probability of a finish in each round.
+
+🟥 5. Round‑Based Finish Probability
+For each round 
+𝑟
+:
+
+𝑃
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑟
+)
+=
+1
+−
+𝑒
+−
+∫
+𝑡
+𝑟
+𝑡
+𝑟
++
+1
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+ 
+𝑑
+𝑡
+This produces:
+
+KO R1
+
+KO R2
+
+KO R3
+
+SUB R1
+
+SUB R2
+
+SUB R3
+
+For 5‑round fights, extended to R4 and R5.
+
+🟥 6. Finish Timing Distribution
+The engine models when finishes occur using a normalized hazard distribution:
+
+𝑃
+(
+𝑡
+)
+=
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+∑
+𝐻
+𝑓
+𝑖
+𝑛
+𝑖
+𝑠
+ℎ
+(
+𝑡
+)
+This gives:
+
+early finishes (KO artists, fast starters)
+
+late finishes (cardio monsters, attrition fighters)
+
+🟥 7. Style‑Driven Finish Modifiers
+Styles modify hazard curves:
+
+KO‑Boosting Styles
+KO artist → +power
+
+Brawler → +chaos
+
+Pressure striker → +pace
+
+Fast starter → +early hazard
+
+SUB‑Boosting Styles
+Grappler → +control
+
+Submission hunter → +submission threat
+
+Scrambler → +chaos grappling
+
+Finish‑Reducing Styles
+Point fighter → −power
+
+Defensive striker → −chaos
+
+Wrestler (top control) → −chaos
+
+These modifiers are applied multiplicatively.
+
+🟥 8. Vulnerability Curves
+Vulnerability increases finish probability:
+
+𝑉
+(
+𝑡
+)
+=
+𝑏
+𝑎
+𝑠
+𝑒
+𝑉
++
+𝑑
+𝑎
+𝑚
+𝑎
+𝑔
+𝑒
+(
+𝑡
+)
++
+𝑓
+𝑎
+𝑡
+𝑖
+𝑔
+𝑢
+𝑒
+(
+𝑡
+)
++
+𝑎
+𝑔
+𝑒
+𝑃
+𝑒
+𝑛
+𝑎
+𝑙
+𝑡
+𝑦
+Where:
+
+baseV = baseline vulnerability
+
+damage(t) = accumulated damage
+
+fatigue(t) = cardio drop
+
+agePenalty = decline curve
+
+This is why older fighters get finished more often.
+
+🟥 9. Chaos Spikes
+ChaosFactor introduces nonlinear spikes:
+
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
+=
+𝐻
+𝐾
+𝑂
+(
+𝑡
+)
+⋅
+(
+1
++
+𝑟
+𝑎
+𝑛
+𝑑
+𝑜
+𝑚
+𝑆
+𝑝
+𝑖
+𝑘
+𝑒
+)
+Where randomSpike is drawn from a heavy‑tailed distribution:
+
+Laplace
+
+Cauchy
+
+Pareto
+
+This models:
+
+flash KOs
+
+wild exchanges
+
+scramble‑to‑submission sequences
+
+🟥 10. Final Finish Probabilities
+After thousands of simulations:
+
+KO probability
+
+SUB probability
+
+DEC probability
+
+Round‑by‑round finish probability
+
+Confidence intervals
+
+These are then passed to:
+
+Bonus Layer
+
+Normalization Layer
+
+AI Explanation Layer

@@ -1,0 +1,379 @@
+5.2 Components (Advanced Breakdown)
+The Matchup Logic Engine evaluates six major component groups.
+Each group contributes numeric modifiers that shape the fightGeometry object.
+
+1. Style vs Style Interaction
+This is the behavioral core of the engine.
+Each fighter’s style tags generate vectors that interact with the opponent’s vectors.
+
+Examples of interactions
+Pressure vs Counter  
+Pressure increases tempo; counter increases precision → countering advantage.
+
+Wrestler vs Striker  
+Wrestler increases takedown probability; striker increases range control → grappling advantage.
+
+Kick-heavy vs Grappler  
+Kick-heavy increases distance control; grappler increases takedown entries → takedown vulnerability.
+
+Cardio Monster vs Slow Starter  
+Cardio monster gains late-round advantage; slow starter gains early-round advantage.
+
+What this produces
+Range modifiers
+
+Pace modifiers
+
+Grappling modifiers
+
+Chaos modifiers
+
+Early/late round modifiers
+
+2. Stat Differentials
+The engine compares raw and derived stats between fighters.
+
+Striking
+Accuracy
+
+Defense
+
+Knockdown rate
+
+Strike tempo
+
+Strike differential
+
+Power index
+
+Grappling
+Takedown accuracy
+
+Takedown defense
+
+Control time
+
+Submission attempts
+
+Scramble success
+
+Cardio
+Pace rating
+
+Damage absorption over time
+
+Late-round performance
+
+Derived Metrics
+Momentum index
+
+Damage tolerance index
+
+Striking differential
+
+Grappling differential
+
+These become numeric modifiers added to fightGeometry.
+
+3. Physical Attributes
+Physical traits influence range, pace, and vulnerability.
+
+Height
+Taller fighters control distance
+
+Shorter fighters win inside exchanges
+
+Reach
+Longer reach improves jabs, counters
+
+Shorter reach improves clinch entries
+
+Age
+Decline curve applied
+
+Cardio penalty
+
+Damage tolerance penalty
+
+Stance
+Southpaw advantage
+
+Switch stance unpredictability
+
+These produce rangeControl, paceControl, and vulnerability modifiers.
+
+4. Historical Patterns
+The engine evaluates long-term trends.
+
+Common Opponents
+Shared opponents
+
+Style vulnerabilities
+
+Style strengths
+
+Damage taken
+
+Damage given
+
+Improvement/Decline Curves
+Fighters improving over time
+
+Fighters declining over time
+
+Activity Level
+Long layoffs
+
+Short notice fights
+
+Frequent fights
+
+Weight Class Changes
+Moving up → durability boost, speed penalty
+
+Moving down → speed boost, cardio penalty
+
+These produce trend-based modifiers.
+
+5. Context Factors
+Contextual realism is applied.
+
+Short Notice
+Cardio penalty
+
+Pace penalty
+
+Game plan penalty
+
+Altitude
+Cardio penalty
+
+Pace penalty
+
+Travel
+Minor cardio penalty
+
+Injury Notes
+Small penalty if present
+
+These produce contextModifier.
+
+6. Gym Tier Modifier
+Gym quality affects preparation and performance.
+
+Tier S (Elite)
++4% to +7%
+Better cardio, defense, game planning.
+
+Tier A (Strong)
++2% to +3%
+
+Tier B (Small/Unknown)
+−1% to −3%
+
+This produces gymTierModifier.
+
+🧩 5.3 Output — fightGeometry Object (Advanced Breakdown)
+After processing all components, the engine produces a fightGeometry object.
+
+This object is the blueprint for the Monte Carlo Simulation Engine.
+
+Here is the full structure:
+
+Code
+fightGeometry = {
+  rangeControl: number,
+  paceControl: number,
+  grapplingAdvantage: number,
+  strikingAdvantage: number,
+  chaosFactor: number,
+  cardioAdvantage: number,
+  earlyRoundAdvantage: number,
+  lateRoundAdvantage: number,
+  finishThreat: number,
+  vulnerability: number,
+  gymTierModifier: number,
+  contextModifier: number
+}
+Below is what each field represents.
+
+rangeControl
+How well a fighter controls distance:
+
+reach
+
+height
+
+stance
+
+kick-heavy vs boxer
+
+wrestler entries vs striker range
+
+Positive = Fighter A controls range
+Negative = Fighter B controls range
+
+paceControl
+Who dictates the tempo:
+
+pressure
+
+volume
+
+cardio
+
+slow/fast starter
+
+fatigue curves
+
+Positive = Fighter A pushes pace
+Negative = Fighter B pushes pace
+
+grapplingAdvantage
+Who wins grappling exchanges:
+
+takedown accuracy
+
+takedown defense
+
+control time
+
+submission threat
+
+scramble success
+
+wrestler vs striker dynamics
+
+Positive = Fighter A grappling advantage
+Negative = Fighter B grappling advantage
+
+strikingAdvantage
+Who wins striking exchanges:
+
+accuracy
+
+defense
+
+knockdown rate
+
+strike differential
+
+power index
+
+countering vs pressure dynamics
+
+Positive = Fighter A striking advantage
+Negative = Fighter B striking advantage
+
+chaosFactor
+Likelihood of wild, unpredictable events:
+
+brawler style
+
+low defense
+
+high power
+
+fast starter volatility
+
+scrambler unpredictability
+
+Higher chaos = more knockdowns, momentum swings, finishes.
+
+cardioAdvantage
+Who performs better over time:
+
+cardio monster
+
+slow starter
+
+late-round performance
+
+damage absorption
+
+fatigue curves
+
+Positive = Fighter A cardio advantage
+Negative = Fighter B cardio advantage
+
+earlyRoundAdvantage
+Who starts stronger:
+
+fast starter
+
+explosive power
+
+early-round aggression
+
+Positive = Fighter A early-round advantage
+Negative = Fighter B early-round advantage
+
+lateRoundAdvantage
+Who finishes stronger:
+
+cardio monster
+
+slow starter
+
+durable fighters
+
+pace control
+
+Positive = Fighter A late-round advantage
+Negative = Fighter B late-round advantage
+
+finishThreat
+Likelihood of finishing the fight:
+
+power index
+
+knockdown rate
+
+submission threat
+
+chaos factor
+
+vulnerability of opponent
+
+Higher = more KO/TKO/SUB probability.
+
+vulnerability
+Likelihood of being finished:
+
+low defense
+
+poor damage tolerance
+
+bad cardio
+
+bad scrambling
+
+age decline
+
+Higher = more likely to get KO’d or subbed.
+
+gymTierModifier
+Bonus from elite training environment:
+
+better cardio
+
+better defense
+
+better game planning
+
+Positive = Fighter A gym advantage
+Negative = Fighter B gym advantage
+
+contextModifier
+Real-world context:
+
+short notice
+
+altitude
+
+travel
+
+injury notes
+
+Positive = Fighter A context advantage
+Negative = Fighter B context advantage

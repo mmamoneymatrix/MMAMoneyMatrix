@@ -1,0 +1,361 @@
+6. Scoring & Outcome Model (Updated)
+MMAMoneyMatrix simulates each round realistically, then converts outcomes into real UFC-style judging.
+
+Round Structure
+Supports:
+
+3-round fights
+
+5-round fights
+
+Later rounds include fatigue weighting.
+
+Round Outcome Modeling
+Damage modeling
+
+Control modeling
+
+Effective striking vs grappling
+
+Pace & pressure
+
+Judge bias profiles
+
+Round Score Generation
+10‑9 — clear winner
+
+10‑8 — dominant round
+
+10‑7 — extreme domination
+
+Decision Outcomes
+Unanimous
+
+Split
+
+Majority
+
+Draws
+
+Finish Integration
+Near-finishes trigger:
+
+Finish probability
+
+Recovery probability
+
+Momentum shift probability
+
+
+4. Scoring & Judging Model (Expert Mode with Judge Bias Matrices)
+This subsystem takes the round events from the Monte Carlo engine and turns them into realistic scorecards, including judge disagreement and bias.
+
+4.1 Inputs per Round
+For each simulated round, you have a structured event summary:
+
+Striking:
+
+significant strikes landed/absorbed
+
+knockdowns
+
+damage index
+
+Grappling:
+
+takedowns (landed/attempted)
+
+control time
+
+submission attempts
+
+dominant positions
+
+Aggression & Control:
+
+forward pressure
+
+cage control
+
+pace
+
+These are converted into criterion scores:
+
+effectiveStrikingScore
+
+effectiveGrapplingScore
+
+aggressionControlScore
+
+4.2 Base Scoring Logic (Before Bias)
+You first compute a raw dominance score for the round:
+
+𝐷
+=
+𝑤
+𝑠
+⋅
+𝑆
++
+𝑤
+𝑔
+⋅
+𝐺
++
+𝑤
+𝑎
+⋅
+𝐴
+Where:
+
+𝑆
+ = effective striking score
+
+𝐺
+ = effective grappling score
+
+𝐴
+ = aggression/control score
+
+𝑤
+𝑠
+,
+𝑤
+𝑔
+,
+𝑤
+𝑎
+ = base weights (e.g. striking > grappling > aggression)
+
+Then you map 
+𝐷
+ to round scores:
+
+Small positive 
+𝐷
+ → 10–9
+
+Large positive 
+𝐷
+ → 10–8
+
+Extreme positive 
+𝐷
+ → 10–7
+
+Same in reverse for the other fighter.
+
+This gives you a neutral judge’s card.
+
+4.3 Judge Bias Matrices
+Now the fun part: not all judges see the same fight.
+
+You model each judge as a bias matrix over the three criteria:
+
+𝐽
+𝑖
+=
+[
+𝑏
+𝑠
+,
+𝑖
+𝑏
+𝑔
+,
+𝑖
+𝑏
+𝑎
+,
+𝑖
+]
+Where:
+
+𝑏
+𝑠
+,
+𝑖
+ = striking bias for judge 
+𝑖
+
+𝑏
+𝑔
+,
+𝑖
+ = grappling bias
+
+𝑏
+𝑎
+,
+𝑖
+ = aggression/control bias
+
+Example judge profiles:
+
+Judge A (Striking-heavy):
+
+𝑏
+𝑠
+=
+1.2
+,
+ 
+𝑏
+𝑔
+=
+0.8
+,
+ 
+𝑏
+𝑎
+=
+0.9
+
+Judge B (Grappling-heavy):
+
+𝑏
+𝑠
+=
+0.9
+,
+ 
+𝑏
+𝑔
+=
+1.2
+,
+ 
+𝑏
+𝑎
+=
+0.9
+
+Judge C (Control-heavy):
+
+𝑏
+𝑠
+=
+0.95
+,
+ 
+𝑏
+𝑔
+=
+1.0
+,
+ 
+𝑏
+𝑎
+=
+1.2
+
+For each judge, you recompute dominance:
+
+𝐷
+𝑖
+=
+𝑏
+𝑠
+,
+𝑖
+⋅
+𝑆
++
+𝑏
+𝑔
+,
+𝑖
+⋅
+𝐺
++
+𝑏
+𝑎
+,
+𝑖
+⋅
+𝐴
+Then map 
+𝐷
+𝑖
+ to:
+
+10–9, 10–8, 10–7 for Fighter A
+
+or 9–10, 8–10, 7–10 for Fighter B
+
+This gives you three different scorecards per round.
+
+4.4 Round-to-Fight Aggregation
+For each simulation:
+
+For each round:
+
+Compute 
+𝐷
+𝑖
+ for each judge.
+
+Assign round scores for Fighter A and Fighter B.
+
+Sum scores across rounds per judge:
+
+judgeA_total_A, judgeA_total_B
+
+judgeB_total_A, judgeB_total_B
+
+judgeC_total_A, judgeC_total_B
+
+Determine outcome type:
+
+Unanimous decision: all three judges pick same winner.
+
+Split decision: 2–1 split.
+
+Majority decision: 2 judges pick winner, 1 scores draw.
+
+Draw: score totals align that way.
+
+You log:
+
+winner
+
+decision type
+
+judge spread (e.g. 29–28, 30–27, 28–29)
+
+4.5 Why Bias Matrices Matter
+Without judge bias:
+
+Every simulation would produce too clean decisions.
+
+You’d miss:
+
+weird split decisions
+
+grappling vs striking disagreements
+
+control vs damage debates
+
+With bias matrices:
+
+You get:
+
+realistic split decisions
+
+fights where one judge “saw it differently”
+
+more variance in decision outcomes
+
+better modeling of controversial fights
+
+This is what makes MMAMoneyMatrix feel like actual UFC judging, not just math.
+
+
+
+
+
+
+
+
+
+

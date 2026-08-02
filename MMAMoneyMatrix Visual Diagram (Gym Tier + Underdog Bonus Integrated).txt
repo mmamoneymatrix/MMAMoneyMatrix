@@ -1,0 +1,89 @@
+                ┌──────────────────────────────┐
+                │      Fighter Data Input       │
+                └──────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   1. Fighter Profile Construction           │
+        │---------------------------------------------│
+        │ • Bio stats                                 │
+        │ • Striking metrics                          │
+        │ • Grappling metrics                         │
+        │ • Fight history                             │
+        │ • Style tags                                │
+        │ • Gym Tier (NEW)                            │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   2. Matchup Logic Engine                   │
+        │---------------------------------------------│
+        │ • Style vs style adjustments                │
+        │ • Context adjustments (layoff, age, etc.)   │
+        │ • Common opponent analysis                   │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   3. Monte Carlo Fight Simulation           │
+        │---------------------------------------------│
+        │ • Thousands of simulated fights             │
+        │ • Round-by-round damage modeling            │
+        │ • Control modeling                          │
+        │ • Grappling threat modeling                 │
+        │ • Pace & pressure modeling                  │
+        │ • Finish probability engine                 │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   4. Scoring & Judging Model                │
+        │---------------------------------------------│
+        │ • 10-9, 10-8, 10-7 scoring                  │
+        │ • Judge bias profiles                       │
+        │ • Decision outcome generation               │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   5. Raw Probability Output                 │
+        │---------------------------------------------│
+        │ • Win probability                           │
+        │ • Method probability (KO/SUB/DEC)           │
+        │ • Round probability                         │
+        │ • Confidence intervals                      │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+┌──────────────────────────────────────────────────────────────────┐
+│   6. Bonus Layer (NEW)                                           │
+│------------------------------------------------------------------│
+│   A. Gym Tier Bonus                                               │
+│      • Tier S (Elite): +4% to +7%                                │
+│      • Tier A (Strong): +2% to +3%                               │
+│      • Tier B (Small/Unknown): -1% to -3%                        │
+│                                                                  │
+│   B. Underdog Bonus                                               │
+│      • Mild (+100 to +150): +3%                                  │
+│      • Medium (+150 to +250): +5%                                │
+│      • Strong (+250 to +400): +6%                                │
+│      • Heavy (+400+): +7%                                        │
+└──────────────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   7. Normalization Layer                   │
+        │---------------------------------------------│
+        │ • Ensures total probability = 100%         │
+        │ • Balances both fighters after bonuses     │
+        └────────────────────────────────────────────┘
+                           │
+                           ▼
+        ┌────────────────────────────────────────────┐
+        │   8. Final Output                           │
+        │---------------------------------------------│
+        │ • Final win probability                     │
+        │ • Final method probability                  │
+        │ • Final decision likelihood                 │
+        │ • AI explanation layer                      │
+        └────────────────────────────────────────────┘

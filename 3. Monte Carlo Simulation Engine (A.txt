@@ -1,0 +1,376 @@
+3. Monte Carlo Simulation Engine (Advanced Breakdown)
+This is the heart of MMAMoneyMatrix. It takes the matchup geometry and runs thousands of simulated fights to estimate realistic probabilities.
+
+3.1 Inputs
+From the Matchup Logic Engine, you get:
+
+Fight geometry object
+
+rangeControl
+
+paceControl
+
+grapplingAdvantage
+
+strikingAdvantage
+
+chaosFactor
+
+cardioAdvantage
+
+earlyRoundAdvantage
+
+lateRoundAdvantage
+
+finishThreat
+
+vulnerability
+
+gymTierModifier
+
+contextModifier
+
+Plus both fighters’ full profiles:
+
+Striking metrics
+
+Grappling metrics
+
+Style tags
+
+Derived metrics (cardio, momentum, damage tolerance)
+
+3.2 Simulation Structure
+Each simulation run models:
+
+Fight length: 3 or 5 rounds
+
+Round-by-round events
+
+Damage accumulation
+
+Control and grappling exchanges
+
+Knockdowns and near-finishes
+
+Judge scoring per round
+
+You run this N times (e.g. 5,000–50,000) to get stable probabilities.
+
+3.3 Round Engine
+For each round, the engine:
+
+Sets base pace
+
+Uses paceControl, cardioAdvantage, styles (pressure, volume, cardio monster).
+
+Generates striking exchanges
+
+Uses accuracy, defense, power index, strike tempo, rangeControl.
+
+Calculates:
+
+landed strikes
+
+absorbed strikes
+
+knockdown probability
+
+Generates grappling exchanges
+
+Uses takedown accuracy/defense, control time, grapplingAdvantage, styles (wrestler, grappler, scrambler).
+
+Calculates:
+
+takedowns
+
+control time
+
+submission attempts
+
+Applies chaosFactor
+
+Random spikes in:
+
+flash knockdowns
+
+wild momentum swings
+
+scrambles
+
+sudden finishes
+
+Tracks damage & fatigue
+
+Damage reduces:
+
+cardio
+
+defense
+
+power
+
+CardioAdvantage + lateRoundAdvantage kick in for rounds 3–5.
+
+3.4 Outcome Events
+Within each simulation:
+
+Decision path
+
+All rounds complete → scoring model decides winner.
+
+Finish path
+
+At any point, finishProbabilityEngine triggers:
+
+KO/TKO
+
+Submission
+
+Doctor stoppage (optional later)
+
+3.5 Aggregation
+After all simulations:
+
+Count:
+
+Fighter A wins
+
+Fighter B wins
+
+Methods (KO/SUB/DEC)
+
+Round of finish
+
+Convert to probabilities:
+
+Win %
+
+Method %
+
+Round %
+
+Confidence intervals
+
+These raw probabilities then go to:
+
+Bonus Layer (Gym Tier + Underdog)
+
+Normalization Layer
+
+AI Explanation Layer
+
+4. Scoring & Judging Model (Advanced Breakdown)
+This is where your engine feels like real UFC judging, not just math.
+
+4.1 Round Scoring Inputs
+From each simulated round, you have:
+
+Significant strikes landed/absorbed
+
+Knockdowns
+
+Control time
+
+Takedowns
+
+Submission attempts
+
+Pace and pressure
+
+Damage index
+
+Grappling dominance index
+
+4.2 Scoring Criteria
+You model the three official criteria:
+
+Effective Striking
+
+Damage > volume
+
+Knockdowns heavily weighted.
+
+Effective Grappling
+
+Control time
+
+Submission attempts
+
+Dominant positions.
+
+Effective Aggression & Octagon Control
+
+Forward pressure
+
+Cage control
+
+Ring generalship.
+
+4.3 Score Generation
+For each round:
+
+10–9
+
+Clear winner, but not dominant.
+
+10–8
+
+Dominant round:
+
+Big damage
+
+Multiple knockdowns
+
+Heavy control.
+
+10–7
+
+Extreme domination:
+
+Near-finish
+
+Multiple knockdowns + huge control
+
+One-sided beatdown.
+
+You simulate judge bias:
+
+Some judges favor:
+
+Striking over grappling
+
+Control over damage
+
+Volume over power
+
+So each round gets three virtual scorecards, not just one.
+
+4.4 Decision Types
+After all rounds:
+
+Sum each judge’s card.
+
+Determine:
+
+Unanimous decision
+
+Split decision
+
+Majority decision
+
+Draw (rare but possible)
+
+This gives you:
+
+Decision win probability
+
+Split vs unanimous likelihood
+
+Judge-variance realism.
+
+5. Finish Probability Engine (Advanced Breakdown)
+This is the violence brain—it decides when fights end inside the distance.
+
+5.1 Inputs
+From fighters + matchup:
+
+Power index
+
+Knockdown rate
+
+Strike differential
+
+Damage tolerance index
+
+Grappling threat (sub attempts, control)
+
+ChaosFactor
+
+FinishThreat
+
+Vulnerability
+
+5.2 KO/TKO Probability
+Per round, you calculate:
+
+Base KO chance from:
+
+Power index
+
+Knockdown rate
+
+Strike differential
+
+Damage already taken.
+
+Modifiers:
+
+ChaosFactor (brawlers, wild exchanges)
+
+Cardio drop (late rounds, tired defense)
+
+Style (brawler, KO artist, pressure striker).
+
+If KO event triggers:
+
+Fight ends → KO/TKO result logged.
+
+5.3 Submission Probability
+Per round, you calculate:
+
+Base SUB chance from:
+
+Submission attempts
+
+GrapplingAdvantage
+
+Control time
+
+Scramble success.
+
+Modifiers:
+
+Fatigue (tired fighters get subbed easier)
+
+Damage (hurt fighters panic or slow).
+
+Style (grappler, submission hunter).
+
+If SUB event triggers:
+
+Fight ends → SUB result logged.
+
+5.4 Round Distribution
+You track when finishes happen:
+
+Early-round KO artists
+
+Late-round cardio monsters breaking opponents
+
+Grapplers who finish once they secure dominant positions.
+
+This gives:
+
+Method by round:
+
+KO R1, KO R2, SUB R3, etc.
+
+5.5 Integration with Scoring
+If a finish occurs:
+
+Scoring model stops.
+
+Fight logged as:
+
+KO/TKO
+
+SUB
+
+Round/time.
+
+If no finish:
+
+Scoring model decides outcome
+
+

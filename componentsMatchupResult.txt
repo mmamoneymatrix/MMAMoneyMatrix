@@ -1,0 +1,32 @@
+import ScenarioPanel from "./ScenarioPanel";
+
+export default function MatchupResult({ result }) {
+  const { winProbA, winProbB, methods, rounds, confidence } = result;
+
+  return (
+    <div className="border p-6 rounded-lg space-y-6">
+      <h2 className="text-2xl font-bold">Matchup Result</h2>
+
+      <div className="space-y-2">
+        <p>Fighter A Win Probability: {winProbA}%</p>
+        <p>Fighter B Win Probability: {winProbB}%</p>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-semibold">Method Breakdown</h3>
+        <ul className="list-disc ml-6">
+          <li>KO/TKO: {methods.ko}%</li>
+          <li>Submission: {methods.sub}%</li>
+          <li>Decision: {methods.dec}%</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-semibold">Confidence Ranges</h3>
+        <p>95% CI: {confidence.low}% – {confidence.high}%</p>
+      </div>
+
+      <ScenarioPanel baseResult={result} />
+    </div>
+  );
+}

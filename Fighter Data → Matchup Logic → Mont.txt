@@ -1,0 +1,3 @@
+Fighter Data → Matchup Logic → Monte Carlo Simulation → Scoring Model
+        ↓                 ↓                     ↓                ↓
+   Gym Tier Bonus     Underdog Bonus → Normalization → Final Output

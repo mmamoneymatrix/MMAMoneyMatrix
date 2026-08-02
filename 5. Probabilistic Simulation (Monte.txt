@@ -1,0 +1,27 @@
+5. Probabilistic Simulation (Monte Carlo Engine)
+The core of MMAMoneyMatrix runs thousands of simulated fights using:
+
+Adjusted stats
+
+Style interactions
+
+Randomized fight events
+
+Probability curves
+
+Damage models
+
+Round-by-round scoring logic
+
+Outputs
+Win probability
+
+Method probability (KO/SUB/DEC)
+
+Round probability
+
+Confidence intervals
+
+Scenario breakdowns
+
+“What swings the fight” analysis

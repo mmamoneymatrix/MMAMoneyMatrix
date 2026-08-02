@@ -1,0 +1,4 @@
+After simulation (just like the Underdog Bonus):
+fighter.winProbability += gymBonus;
+Then normalize:
+normalize(probA, probB);

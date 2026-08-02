@@ -1,0 +1,31 @@
+export interface Fighter {
+  id: string;
+  name: string;
+  record: string;
+  gym: string;
+  styles: string[];
+  striking: any;
+  grappling: any;
+  derived: any;
+}
+
+export interface MethodBreakdown {
+  ko: number;
+  sub: number;
+  dec: number;
+}
+
+export interface ConfidenceRange {
+  low: number;
+  high: number;
+}
+
+export interface MatchupResult {
+  fighterA: Fighter;
+  fighterB: Fighter;
+  winProbA: number;
+  winProbB: number;
+  methods: MethodBreakdown;
+  rounds: Record<string, number>;
+  confidence: ConfidenceRange;
+}

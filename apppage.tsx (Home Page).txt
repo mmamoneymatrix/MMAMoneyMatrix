@@ -1,0 +1,10 @@
+import MatchupRunner from "@/components/MatchupRunner";
+
+export default function Page() {
+  return (
+    <main className="flex flex-col items-center p-8">
+      <h1 className="text-4xl font-bold mb-6">MMAMoneyMatrix</h1>
+      <MatchupRunner />
+    </main>
+  );
+}

@@ -1,0 +1,11 @@
+{
+  bio: {...},
+  career: {...},
+  striking: {...},
+  grappling: {...},
+  history: [...],
+  styles: [...],
+  gymTier: "S",
+  underdogLevel: "Medium",
+  derivedMetrics: {...}
+}
